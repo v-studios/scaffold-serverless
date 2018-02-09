@@ -32,6 +32,10 @@ Later, I'll add a workflow step that deploys the serverless app to our
 AWS "stage" (feature-branch, dev, qa, prod). Then run integration tests.
 
 Instead of hard-coding all the virtualenv and pytest command line goo
-in the CircleCI config, we should have it use targets in the
-Makefile. That way, we can give the developer easy "make ..." commands
-that are identical to what the CI system uses.
+in the CircleCI config, we use targets in the Makefile. That way, we
+can give the developer easy "make ..." commands that are identical to
+what the CI system uses.
+
+When you commit and push -- to any branch -- CircleCI will build. You
+can check the status on the `CircleCI Dashboard
+<https://circleci.com/gh/v-studios/scaffold-serverless>`_.
