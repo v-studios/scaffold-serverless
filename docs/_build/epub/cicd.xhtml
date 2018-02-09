@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+  <head>
+    <meta charset="utf-8" />
+    <title>CI/CD</title>
+    <link rel="stylesheet" href="_static/epub.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" /> 
+  </head>
+  <body>
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="ci-cd">
+<h1>CI/CD</h1>
+<p>Continuous Integration / Continuous Deployment helps find bugs faster
+and helps prevent bad code from getting out into the world.</p>
+<p>We use commercial SaaS <a class="reference external" href="https://circleci.com/">CircleCI</a><span class="link-target"> [https://circleci.com/]</span> as it’s
+reasonably priced, pretty easy to use, and featureful with good
+integrations into GitHub, AWS, etc.</p>
+<p>To create a new “project”, login to CircleCI with your GitHub
+credentials, select your group from the list of GitHub groups you
+belong to(e.g., v-studios) from the top left pulldown, then click into
+PROJECTS on the left nav bar. Add Project from the top right: it will
+list your GitHub repos. I picked “scaffold-serverless”, strangely
+enough, and select “Setup project”.</p>
+<p>Next pick Operating System “Linux” and Language “Python”</p>
+<p>TODO: we have to pick a different language container for Serverless,
+because we need Node and Python; I’m trying Node this time to see if
+it might have python.</p>
+<p>I followed the directions to create a .circleci/config.yml file and
+then started to populate it.</p>
+<p>I’ll first make it create a virtualenv, pip install the requirements,
+then run the tests.  It should test our (serverless) python code.</p>
+<p>Later, I’ll add a workflow step that deploys the serverless app to our
+AWS “stage” (feature-branch, dev, qa, prod). Then run integration tests.</p>
+<p>Instead of hard-coding all the virtualenv and pytest command line goo
+in the CircleCI config, we should have it use targets in the
+Makefile. That way, we can give the developer easy “make …” commands
+that are identical to what the CI system uses.</p>
+</div>
+
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  </body>
+</html>

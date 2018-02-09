@@ -45,6 +45,11 @@ jobs:
             make tests
       - store_test_results:
           path: test-results
+      - run:
+          name: make documentation
+      - store_artifacts:
+          path: docs/_build
+          destination: built-docs
           
   # Deploy Lambda, S3, DynamoDB needs AWS creds in Project AWS setting:
   # https://circleci.com/gh/v-studios/vmessage-sls/edit#aws

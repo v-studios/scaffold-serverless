@@ -48,17 +48,13 @@ documentation, and it’s written in Python, so we’ll setup a Python
 virtual environment.</p>
 <div class="section" id="install">
 <h3>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h3>
-<p>I’m using <a class="reference external" href="https://github.com/pyenv/pyenv">pyenv</a> to manage my
-python versions, so I pick a python3:</p>
+<p>If you are using <a class="reference external" href="https://github.com/pyenv/pyenv">pyenv</a> to manage
+python versions, pick a python3 like:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pyenv</span> <span class="n">local</span> <span class="mf">3.6</span><span class="o">.</span><span class="mi">3</span>
 </pre></div>
 </div>
-<p>Then create a virtual environment using pyenv’s python3:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">virtualenv</span> <span class="o">.</span><span class="n">venv3</span>
-</pre></div>
-</div>
-<p>If you don’t use pyenv, you might do create a python3 virtualenv like:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">virtualenv</span> <span class="o">--</span><span class="n">python</span><span class="o">=</span><span class="n">python3</span>
+<p>Create a virtual environment:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">virtualenv</span> <span class="o">--</span><span class="n">python</span><span class="o">=</span><span class="n">python3</span> <span class="o">.</span><span class="n">venv3</span>
 </pre></div>
 </div>
 <p>Activate your virtual environment:</p>
@@ -80,7 +76,9 @@ install all the listed and versioned dependencies:</p>
 </div>
 <div class="section" id="building-docs">
 <h3>Building Docs<a class="headerlink" href="#building-docs" title="Permalink to this headline">¶</a></h3>
-<p>Now you can build the docs by going into the <code class="docutils literal"><span class="pre">docs</span></code> directory and (with the virtualenv activated) use the Makefile to create a HTML version:</p>
+<p>To do it manually, you can build the docs by going into the <code class="docutils literal"><span class="pre">docs</span></code>
+directory (with virtualenv activated) and use its Makefile to create a
+HTML version:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">docs</span>
 <span class="n">make</span> <span class="n">html</span>
 </pre></div>
@@ -96,6 +94,11 @@ install all the listed and versioned dependencies:</p>
 </pre></div>
 </div>
 <p>and find the output in <a class="reference external" href="_build/epub/ScaffoldingServerless.epub">_build/epub/ScaffoldingServerless.epub</a>.</p>
+<p>As a convenience (with virtualenv activated), in the top level
+directory, you can build all versions:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">docs</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="editing-docs">
 <h3>Editing Docs<a class="headerlink" href="#editing-docs" title="Permalink to this headline">¶</a></h3>
@@ -103,6 +106,66 @@ install all the listed and versioned dependencies:</p>
 you wish. If you add a new page, reference it from the <a class="reference external" href="index.rst">index.rst</a> file, omitting the <code class="docutils literal"><span class="pre">.rst</span></code> extension.</p>
 <p>Syntax and Configuration (in <code class="docutils literal"><span class="pre">conf.py</span></code> are beyond the scope of this doc).</p>
 </div>
+</div>
+<span id="document-testing"></span><div class="section" id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
+<p>We prefer <a class="reference external" href="https://docs.pytest.org/en/latest/">pytest</a> to the
+built-in unit tests as they’re shorter to write and have more
+capabilities.  It’s installed as part of the <a class="reference external" href="requirements.txt">requirements.txt</a> file.</p>
+<p>You should write your tests, organized into different <code class="docutils literal"><span class="pre">test_\*.py</span></code>
+or <code class="docutils literal"><span class="pre">*_test.py</span></code> files under the <code class="docutils literal"><span class="pre">tests/</span></code> directory.  For example,
+you might have <code class="docutils literal"><span class="pre">test_apig.py</span></code>, <code class="docutils literal"><span class="pre">test_dynamodb.py</span></code>,
+<code class="docutils literal"><span class="pre">test_authentication.py</span></code> and so on.  You can use this for unit tests
+or integration tests.</p>
+<p>For info on writing tests, see the <cite>pytest</cite> docs.</p>
+<p>To run the tests, with virtualenv activated, in the top level
+directory, do:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">tests</span>
+</pre></div>
+</div>
+<p>We also installed <code class="docutils literal"><span class="pre">pytest-cov</span></code> to measure code test coverage. You
+can run that with:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">coverage</span>
+</pre></div>
+</div>
+<p>It’s settings are configured in <code class="docutils literal"><span class="pre">.coveragerc</span></code>.  It stores state
+information in <code class="docutils literal"><span class="pre">.coverage</span></code> and output a HTML report under
+<code class="docutils literal"><span class="pre">htmlcov/</span></code>; don’t check these into source control (these are
+gitignored here).</p>
+</div>
+<span id="document-cicd"></span><div class="section" id="ci-cd">
+<h2>CI/CD<a class="headerlink" href="#ci-cd" title="Permalink to this headline">¶</a></h2>
+<p>Continuous Integration / Continuous Deployment helps find bugs faster
+and helps prevent bad code from getting out into the world.</p>
+<p>We use commercial SaaS <a class="reference external" href="https://circleci.com/">CircleCI</a> as it’s
+reasonably priced, pretty easy to use, and featureful with good
+integrations into GitHub, AWS, etc.</p>
+<p>To create a new “project”, login to CircleCI with your GitHub
+credentials, select your group from the list of GitHub groups you
+belong to(e.g., v-studios) from the top left pulldown, then click into
+PROJECTS on the left nav bar. Add Project from the top right: it will
+list your GitHub repos. I picked “scaffold-serverless”, strangely
+enough, and select “Setup project”.</p>
+<p>Next pick Operating System “Linux” and Language “Python”</p>
+<p>TODO: we have to pick a different language container for Serverless,
+because we need Node and Python; I’m trying Node this time to see if
+it might have python.</p>
+<p>I followed the directions to create a .circleci/config.yml file and
+then started to populate it.</p>
+<p>I’ll first make it create a virtualenv, pip install the requirements,
+then run the tests.  It should test our (serverless) python code.</p>
+<p>Later, I’ll add a workflow step that deploys the serverless app to our
+AWS “stage” (feature-branch, dev, qa, prod). Then run integration tests.</p>
+<p>Instead of hard-coding all the virtualenv and pytest command line goo
+in the CircleCI config, we should have it use targets in the
+Makefile. That way, we can give the developer easy “make …” commands
+that are identical to what the CI system uses.</p>
+</div>
+<span id="document-todo"></span><div class="section" id="todo">
+<h2>TODO<a class="headerlink" href="#todo" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Add our source code directories to the coverage report (it does <code class="docutils literal"><span class="pre">.</span></code> now, which is useless)</li>
+</ul>
 </div>
 </div>
 </div>

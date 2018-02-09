@@ -10,18 +10,14 @@ virtual environment.
 Install
 =======
 
-I'm using `pyenv <https://github.com/pyenv/pyenv>`_ to manage my
-python versions, so I pick a python3::
+If you are using `pyenv <https://github.com/pyenv/pyenv>`_ to manage
+python versions, pick a python3 like::
 
   pyenv local 3.6.3
 
-Then create a virtual environment using pyenv's python3::
+Create a virtual environment::
 
-  virtualenv .venv3
-
-If you don't use pyenv, you might do create a python3 virtualenv like::
-
-  virtualenv --python=python3
+  virtualenv --python=python3 .venv3
 
 Activate your virtual environment::
 
@@ -45,7 +41,9 @@ You won't have to run the quickstart, everything's in ``docs``.
 Building Docs
 =============
 
-Now you can build the docs by going into the ``docs`` directory and (with the virtualenv activated) use the Makefile to create a HTML version::
+To do it manually, you can build the docs by going into the ``docs``
+directory (with virtualenv activated) and use its Makefile to create a
+HTML version::
 
   cd docs
   make html
@@ -64,6 +62,12 @@ You can even make ePub with::
   make epub
 
 and find the output in `_build/epub/ScaffoldingServerless.epub <_build/epub/ScaffoldingServerless.epub>`_.
+
+As a convenience (with virtualenv activated), in the top level
+directory, you can build all versions::
+
+  make docs
+
 
 Editing Docs
 ============
