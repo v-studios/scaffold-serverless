@@ -47,6 +47,8 @@ jobs:
           path: test-results
       - run:
           name: make documentation
+          command: |
+            make docs
       - store_artifacts:
           path: docs/_build
           destination: built-docs
