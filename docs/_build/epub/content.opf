@@ -12,8 +12,8 @@
     <dc:publisher>Chris Shenton</dc:publisher>
     <dc:rights>2018, Chris Shenton</dc:rights>
     <dc:identifier id="unknown">unknown</dc:identifier>
-    <dc:date>2018-02-09T22:30:07Z</dc:date>
-    <meta property="dcterms:modified">2018-02-09T22:30:07Z</meta>
+    <dc:date>2018-02-09T22:38:14Z</dc:date>
+    <meta property="dcterms:modified">2018-02-09T22:38:14Z</meta>
     <meta property="ibooks:version">0.1</meta>
     <meta property="ibooks:specified-fonts">true</meta>
     <meta property="ibooks:binding">true</meta>
@@ -42,6 +42,7 @@
     <item id="epub-17" href="_static/pygments.css" media-type="text/css" />
     <item id="epub-18" href="_static/up-pressed.png" media-type="image/png" />
     <item id="epub-19" href="_static/up.png" media-type="image/png" />
+    <item id="epub-20" href="_images/cicd-dashboard.png" media-type="image/png" />
   </manifest>
   <spine toc="ncx" page-progression-direction="ltr">
     <itemref idref="epub-3" />

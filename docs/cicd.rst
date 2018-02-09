@@ -39,3 +39,6 @@ what the CI system uses.
 When you commit and push -- to any branch -- CircleCI will build. You
 can check the status on the `CircleCI Dashboard
 <https://circleci.com/gh/v-studios/scaffold-serverless>`_.
+
+.. image:: cicd-dashboard.png
+   :width: 100%
