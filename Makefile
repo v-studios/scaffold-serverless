@@ -5,10 +5,11 @@ all:
 # HOW TO DETECT AND SET PYENV
 
 venv virtualenv .venv3 .venv3/bin/pip:
-	virtualenv --python=python3 .venv3
-
+	@echo CREATING VIRTUALENV .venv3
+	python3 -m venv .venv3
 
 pipinstall .venv3/bin/pytest .venv3/bin/coverage: .venv3/bin/pip requirements.txt
+	@echo PIP INSTALLING REQUIREMENTS
 	.venv3/bin/pip install -r requirements.txt
 
 # If we want Makefile to only build when we have new stuff, we have to itemize every .rst file
