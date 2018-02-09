@@ -9,3 +9,9 @@ all:
 
 docs:
 	cd docs && make html singlehtml epub
+
+tests test: tests
+	pytest
+
+coverage cov: tests
+	pytest --cov --cov-report=term --cov-report=html 

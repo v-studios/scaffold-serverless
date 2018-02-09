@@ -7,10 +7,16 @@ Serverless Framework. It's intended to be a base for creating other
 projects, with all the tools you usually don't add until the very end
 -- when it's too late.  To that end, this includes:
 
+* documentation: compiled from RST with Sphinx to HTML and PDF
 * test runner: py.test
 * multiple stages: local, feature-branch, dev, qa, prod
 * CI/CD: with CircleCI since that's what we use
-* documentation: compiled from RST with Sphinx to HTML and PDF
+* pep8, lint, flake8 checks
+* badges on this page for docs, tests, etc.
+* tox
+* badges on this page for docs, tests, etc
+* 508 testing
+* security testing
 
 The application isn't terribly important but ideally should include
 common use cases, so here are a few features I can think of:

@@ -1,0 +1,10 @@
+[run]
+omit =
+     .venv3/*
+     docs/*
+     tests/*
+branch = True
+
+[report]
+fail_under = 66
+show_missing = True
