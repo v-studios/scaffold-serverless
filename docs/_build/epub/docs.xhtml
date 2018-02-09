@@ -20,17 +20,13 @@ documentation, and it’s written in Python, so we’ll setup a Python
 virtual environment.</p>
 <div class="section" id="install">
 <h2>Install</h2>
-<p>I’m using <a class="reference external" href="https://github.com/pyenv/pyenv">pyenv</a><span class="link-target"> [https://github.com/pyenv/pyenv]</span> to manage my
-python versions, so I pick a python3:</p>
+<p>If you are using <a class="reference external" href="https://github.com/pyenv/pyenv">pyenv</a><span class="link-target"> [https://github.com/pyenv/pyenv]</span> to manage
+python versions, pick a python3 like:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pyenv</span> <span class="n">local</span> <span class="mf">3.6</span><span class="o">.</span><span class="mi">3</span>
 </pre></div>
 </div>
-<p>Then create a virtual environment using pyenv’s python3:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">virtualenv</span> <span class="o">.</span><span class="n">venv3</span>
-</pre></div>
-</div>
-<p>If you don’t use pyenv, you might do create a python3 virtualenv like:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">virtualenv</span> <span class="o">--</span><span class="n">python</span><span class="o">=</span><span class="n">python3</span>
+<p>Create a virtual environment:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">virtualenv</span> <span class="o">--</span><span class="n">python</span><span class="o">=</span><span class="n">python3</span> <span class="o">.</span><span class="n">venv3</span>
 </pre></div>
 </div>
 <p>Activate your virtual environment:</p>
@@ -52,7 +48,9 @@ install all the listed and versioned dependencies:</p>
 </div>
 <div class="section" id="building-docs">
 <h2>Building Docs</h2>
-<p>Now you can build the docs by going into the <code class="docutils literal"><span class="pre">docs</span></code> directory and (with the virtualenv activated) use the Makefile to create a HTML version:</p>
+<p>To do it manually, you can build the docs by going into the <code class="docutils literal"><span class="pre">docs</span></code>
+directory (with virtualenv activated) and use its Makefile to create a
+HTML version:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">docs</span>
 <span class="n">make</span> <span class="n">html</span>
 </pre></div>
@@ -68,6 +66,11 @@ install all the listed and versioned dependencies:</p>
 </pre></div>
 </div>
 <p>and find the output in <a class="reference external" href="_build/epub/ScaffoldingServerless.epub">_build/epub/ScaffoldingServerless.epub</a>.</p>
+<p>As a convenience (with virtualenv activated), in the top level
+directory, you can build all versions:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">docs</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="editing-docs">
 <h2>Editing Docs</h2>

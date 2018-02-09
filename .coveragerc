@@ -2,9 +2,12 @@
 omit =
      .venv3/*
      docs/*
-     tests/*
+#     tests/*
 branch = True
 
 [report]
 fail_under = 66
 show_missing = True
+
+[html]
+directory = test-results/coverage

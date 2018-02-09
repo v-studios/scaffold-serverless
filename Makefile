@@ -1,17 +1,24 @@
 all:
 	@echo "TODO: create default target"
-	@echo "For now, you can make 'docs'"
+	@echo "For now, you can make: docs, tests, coverage"
+
+# HOW TO DETECT AND SET PYENV
+
+venv virtualenv .venv3 .venv3/bin/pip:
+	@echo CREATING VIRTUALENV .venv3
+	python3 -m venv .venv3
+
+pipinstall .venv3/bin/pytest .venv3/bin/coverage .venv3/bin/sphinx-build: .venv3/bin/pip requirements.txt
+	@echo PIP INSTALLING REQUIREMENTS
+	.venv3/bin/pip install -r requirements.txt
 
 # If we want Makefile to only build when we have new stuff, we have to itemize every .rst file
 # and we're likely to not keep up with them, so just force it every time.
-#docs docs/_build/html/index.html docs/_build/singlehtml/index.html ScaffoldingServerless.epub: docs/index.rst docs/docs.rst
 .PHONY: docs
+docs doc: .venv3/bin/sphinx-build
+	cd docs && make SPHINXBUILD=../.venv3/bin/sphinx-build html singlehtml epub
 
-docs:
-	cd docs && make html singlehtml epub
-
-tests test: tests
-	pytest
-
-coverage cov: tests
-	pytest --cov --cov-report=term --cov-report=html 
+# .PHONY forces it to run, instead of treating tests directory as a built thing
+.PHONY: tests
+tests test: .venv3/bin/pytest .venv3/bin/coverage
+	.venv3/bin/pytest --junit-xml=test-results/junit/junit.xml --cov --cov-report=term --cov-report=html 

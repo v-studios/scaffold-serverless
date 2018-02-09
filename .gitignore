@@ -1,2 +1,9 @@
-/.coverage
+.coverage
 htmlcov/
+.venv3/
+__pycache__/
+*.py[cod]
+*~
+
+.python-version
+test-results/

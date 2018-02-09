@@ -46,5 +46,23 @@
         <content src="docs.xhtml#editing-docs" />  
       </navPoint>
     </navPoint>
+    <navPoint id="navPoint7" playOrder="6">
+      <navLabel>
+        <text>Testing</text>
+      </navLabel>
+      <content src="testing.xhtml" />  
+    </navPoint>
+    <navPoint id="navPoint8" playOrder="7">
+      <navLabel>
+        <text>CI/CD</text>
+      </navLabel>
+      <content src="cicd.xhtml" />  
+    </navPoint>
+    <navPoint id="navPoint9" playOrder="8">
+      <navLabel>
+        <text>TODO</text>
+      </navLabel>
+      <content src="todo.xhtml" />  
+    </navPoint>
   </navMap>
 </ncx>

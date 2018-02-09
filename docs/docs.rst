@@ -10,18 +10,14 @@ virtual environment.
 Install
 =======
 
-I'm using `pyenv <https://github.com/pyenv/pyenv>`_ to manage my
-python versions, so I pick a python3::
+If you are using `pyenv <https://github.com/pyenv/pyenv>`_ to manage
+python versions, pick a python3 like::
 
   pyenv local 3.6.3
 
-Then create a virtual environment using pyenv's python3::
+Create a virtual environment::
 
-  virtualenv .venv3
-
-If you don't use pyenv, you might do create a python3 virtualenv like::
-
-  virtualenv --python=python3
+  virtualenv --python=python3 .venv3
 
 Activate your virtual environment::
 

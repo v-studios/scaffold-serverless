@@ -23,6 +23,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Testing" href="testing.html" />
     <link rel="prev" title="Welcome to Scaffolding Serverless’s documentation!" href="index.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -46,17 +47,13 @@ documentation, and it’s written in Python, so we’ll setup a Python
 virtual environment.</p>
 <div class="section" id="install">
 <h2>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h2>
-<p>I’m using <a class="reference external" href="https://github.com/pyenv/pyenv">pyenv</a> to manage my
-python versions, so I pick a python3:</p>
+<p>If you are using <a class="reference external" href="https://github.com/pyenv/pyenv">pyenv</a> to manage
+python versions, pick a python3 like:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pyenv</span> <span class="n">local</span> <span class="mf">3.6</span><span class="o">.</span><span class="mi">3</span>
 </pre></div>
 </div>
-<p>Then create a virtual environment using pyenv’s python3:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">virtualenv</span> <span class="o">.</span><span class="n">venv3</span>
-</pre></div>
-</div>
-<p>If you don’t use pyenv, you might do create a python3 virtualenv like:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">virtualenv</span> <span class="o">--</span><span class="n">python</span><span class="o">=</span><span class="n">python3</span>
+<p>Create a virtual environment:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">virtualenv</span> <span class="o">--</span><span class="n">python</span><span class="o">=</span><span class="n">python3</span> <span class="o">.</span><span class="n">venv3</span>
 </pre></div>
 </div>
 <p>Activate your virtual environment:</p>
@@ -78,7 +75,9 @@ install all the listed and versioned dependencies:</p>
 </div>
 <div class="section" id="building-docs">
 <h2>Building Docs<a class="headerlink" href="#building-docs" title="Permalink to this headline">¶</a></h2>
-<p>Now you can build the docs by going into the <code class="docutils literal"><span class="pre">docs</span></code> directory and (with the virtualenv activated) use the Makefile to create a HTML version:</p>
+<p>To do it manually, you can build the docs by going into the <code class="docutils literal"><span class="pre">docs</span></code>
+directory (with virtualenv activated) and use its Makefile to create a
+HTML version:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">docs</span>
 <span class="n">make</span> <span class="n">html</span>
 </pre></div>
@@ -94,6 +93,11 @@ install all the listed and versioned dependencies:</p>
 </pre></div>
 </div>
 <p>and find the output in <a class="reference external" href="_build/epub/ScaffoldingServerless.epub">_build/epub/ScaffoldingServerless.epub</a>.</p>
+<p>As a convenience (with virtualenv activated), in the top level
+directory, you can build all versions:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">docs</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="editing-docs">
 <h2>Editing Docs<a class="headerlink" href="#editing-docs" title="Permalink to this headline">¶</a></h2>
@@ -113,6 +117,7 @@ you wish. If you add a new page, reference it from the <a class="reference exter
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="index.html" title="previous chapter">Welcome to Scaffolding Serverless’s documentation!</a></li>
+      <li>Next: <a href="testing.html" title="next chapter">Testing</a></li>
   </ul></li>
 </ul>
 </div>

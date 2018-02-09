@@ -11,6 +11,10 @@ Welcome to Scaffolding Serverless's documentation!
    :caption: Contents:
 
    docs
+   testing
+   cicd
+   todo
+
 
 Indices and tables
 ==================
