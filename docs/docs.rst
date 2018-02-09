@@ -4,8 +4,8 @@
 
 
 We use `Sphinx <http://www.sphinx-doc.org/en/stable/index.html>`_ for
-documentation, and it's in Python, so we'll setup python and a virtual
-environment.
+documentation, and it's written in Python, so we'll setup a Python
+virtual environment.
 
 Install
 =======
@@ -15,28 +15,39 @@ python versions, so I pick a python3::
 
   pyenv local 3.6.3
 
-Then create a virtual environment and activate it::
+Then create a virtual environment using pyenv's python3::
 
   virtualenv .venv3
+
+If you don't use pyenv, you might do create a python3 virtualenv like::
+
+  virtualenv --python=python3
+
+Activate your virtual environment::
+
   source .venv3/bin/activate
 
-I manually installed it, then created a requirements
-`<requirements.txt>`_file so you don't have to; instead, install
-the listed dependencies::
+
+I manually installed Sphinx, then created a requirements
+`<requirements.txt>`_ file so you don't have install it; instead,
+install all the listed and versioned dependencies::
 
   pip install -r requirements.txt
 
-Then I ran the quickstart and took most of the defaults, except I used
+Then I ran the quickstart and took the defaults, except I used
 ``docs`` as my root path, and gave it my name and version number::
 
   sphinx-quickstart
 
-You won't have to do this.
+You won't have to run the quickstart, everything's in ``docs``.
+
 
 Building Docs
 =============
 
-Now you can build the docs by going into the ``docs`` directory and (with the virtualenv activated) use the Makefile to create a HTML version::
+To do it manually, you can build the docs by going into the ``docs``
+directory (with virtualenv activated) and use its Makefile to create a
+HTML version::
 
   cd docs
   make html
@@ -55,6 +66,12 @@ You can even make ePub with::
   make epub
 
 and find the output in `_build/epub/ScaffoldingServerless.epub <_build/epub/ScaffoldingServerless.epub>`_.
+
+As a convenience (with virtualenv activated), in the top level
+directory, you can build all versions::
+
+  make docs
+
 
 Editing Docs
 ============
