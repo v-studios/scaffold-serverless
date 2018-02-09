@@ -45,6 +45,9 @@ jobs:
             make tests
       - store_test_results:
           path: test-results
+      - store_artifacts:
+          path: test-results
+          destination: test-results
       - run:
           name: make documentation
           command: |
