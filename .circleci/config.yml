@@ -1,0 +1,115 @@
+# CircleCI 2.0 configuration hacked for Serverless with Python and Node
+# Check https://circleci.com/docs/2.0/language-python/ for more details
+
+# We are using Lambda with Python 3.6; serverless needs nodejs and python
+# so use an undocumented CircleCI container that provides both.
+
+# 1. Setup virtualenv, pip install requirements, run unit tests
+# 2. sls deploy into "stage" (AWS environment) based on git branch name
+# 3. Setup virtualenv, pip install requirements, run integration tests
+
+# We want to deploy when commits are made to branches with
+# branch-specific `.ini` files appropriate to the "stage":
+# - develop:   dev.ini
+# - release/*: qa.ini
+# - master:    prod.ini
+# - feature/*: ${CIRCLECI_USERNAME}.ini
+# The CIRCLECI_USERNAME is the GitHub username who committed; 
+# this way each developer gets their own AWS environment.
+
+version: 2
+
+jobs:
+  pytest:
+    docker:
+      - image: circleci/python:3.6.4-stretch-node
+
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - requirements-{{ checksum "requirements.txt" }}
+          - requirements-
+      - run:
+          name: install dependencies
+          command: |
+            make pipinstall
+      - save_cache:
+          paths:
+            - ./venv
+          key: requirements-{{ checksum "requirements.txt" }}
+      - run:
+          name: run tests and coverage report
+          command: |
+            make tests
+      - store_test_results:
+          path: test-results
+          
+  # Deploy Lambda, S3, DynamoDB needs AWS creds in Project AWS setting:
+  # https://circleci.com/gh/v-studios/vmessage-sls/edit#aws
+  slsdeploy:
+    docker:
+      - image: circleci/python:3.6.4-stretch-node
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - node_modules-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - node_modules-
+      - run:
+          name: install npm pacakges
+          command: |
+            npm install
+      - save_cache:
+          paths:
+            - ./node_modules
+          key: node_modules-{{ checksum "package.json" }}
+      - run:
+          # TODO: Finch should get region from serverless.yml service.provider.region
+          # but a bug prevents it doing the variable expansion; I filed a ticcket:
+          # https://github.com/fernando-mc/serverless-finch/issues/17
+          # For now, hard-code it to best-guess by stage.
+          name: sls deploy frontend via Finch and backend via normal serverless deploy...
+          command: |
+            echo "Doing sls deploy BRANCH=${CIRCLE_BRANCH} USERNAME=${CIRCLE_USERNAME}"
+            case "${CIRCLE_BRANCH}" in
+              master)
+                echo "Deploying to stage prod"
+                node_modules/.bin/sls client deploy --stage prod --region us-east-1
+                node_modules/.bin/sls deploy --stage prod
+                ;;
+              release/*)
+                echo "Deploying to stage qa"
+                node_modules/.bin/sls client deploy --stage qa --region us-east-1
+                node_modules/.bin/sls deploy --stage qa
+                ;;
+              develop)
+                echo "Deploying to stage dev"
+                node_modules/.bin/sls client deploy --stage dev --region ap-southeast-1
+                node_modules/.bin/sls deploy --stage dev
+                ;;
+              feature/*)
+                echo "Deploying to stage ${CIRCLE_USERNAME}"
+                node_modules/.bin/sls client deploy --stage ${CIRCLE_USERNAME} --region ap-southeast-1
+                node_modules/.bin/sls deploy --stage ${CIRCLE_USERNAME}
+                ;;
+              *)
+                echo "ERROR: unrecognized CIRCLE_BRANCH=${CIRCLE_BRANCH}"
+                exit 1
+                ;;
+            esac
+
+workflows:
+  version: 2
+  pytest_slsdeploy:
+    jobs:
+      - pytest
+      # - slsdeploy:
+      #     requires:
+      #       - pytest
+              
+
+          
