@@ -164,11 +164,38 @@ what the CI system uses.</p>
 can check the status on the <a class="reference external" href="https://circleci.com/gh/v-studios/scaffold-serverless">CircleCI Dashboard</a>.</p>
 <a class="reference internal image-reference" href="_images/cicd-dashboard.png"><img alt="_images/cicd-dashboard.png" src="_images/cicd-dashboard.png" style="width: 100%;" /></a>
 </div>
+<span id="document-lint-flake"></span><div class="section" id="linting-with-flake8">
+<h2>Linting with Flake8<a class="headerlink" href="#linting-with-flake8" title="Permalink to this headline">¶</a></h2>
+<p>We use <code class="docutils literal"><span class="pre">Flake8</span> <span class="pre">&lt;http://flake8.pycqa.org/en/latest/index.html&gt;`_</span> <span class="pre">to</span>
+<span class="pre">&quot;lint&quot;</span> <span class="pre">our</span> <span class="pre">code.</span> <span class="pre">Linting,</span> <span class="pre">from</span> <span class="pre">the</span> <span class="pre">``C</span></code> language, is an automatic
+inspection of code that looks for sloppy technique or other suspicious
+things.  It’s frequently used to enforce compliance to standard Python
+coding guidelines like <a class="reference external" href="https://www.python.org/dev/peps/pep-0008/">PEP8</a>.</p>
+<p>The run of Flake8 is configured by a <code class="docutils literal"><span class="pre">.flake8</span></code> file in the top
+directory.  We’ve tweaked it to allow 96-character long lines instead
+of the more restricive (and less readable) 72 characters PEP8
+recommends; in a world of big screens, 72 decreases readability.</p>
+</div>
+<span id="document-git-hooks"></span><div class="section" id="git-hooks">
+<h2>Git Hooks<a class="headerlink" href="#git-hooks" title="Permalink to this headline">¶</a></h2>
+<p>We use a git Pre-Push hook <a class="reference external" href=".git/hooks/pre-push">.git/hooks/pre-push</a>. Unsurprisingly, it’s run right before pushing
+code to the repo.  That hook does things like runs our test suite and
+Flake8 lint checks.</p>
+<p>If any of the tests or the flake8 process fail, the script exits with
+a non-zero status and this prevents the git push from going
+through. Fix your code, commit, and try again.</p>
+<p>If you want to force a push, of untested, unlinted code, use the flag like:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">push</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">verify</span>
+</pre></div>
+</div>
+<p>and hang your head in shame.</p>
+</div>
 <span id="document-todo"></span><div class="section" id="todo">
 <h2>TODO<a class="headerlink" href="#todo" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Add our source code directories to the coverage report (it does <code class="docutils literal"><span class="pre">.</span></code> now, which is useless)</li>
 <li>separate requirements-devel.rst</li>
+<li>Try and prevent pip from reinstalling everything on every run, figure out the dependecy detection</li>
 </ul>
 </div>
 </div>
