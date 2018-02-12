@@ -1,0 +1,10 @@
+[flake8]
+# PEP8 says 72 but these days, that's a bit short and pedantic
+max-line-length = 96
+exclude =
+        .git,
+        __pycache__,
+        docs/source/conf.py,
+        old,
+        build,
+        dist

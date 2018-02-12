@@ -22,3 +22,7 @@ docs doc: .venv3/bin/sphinx-build
 .PHONY: tests
 tests test: .venv3/bin/pytest .venv3/bin/coverage
 	.venv3/bin/pytest --junit-xml=test-results/junit/junit.xml --cov --cov-report=term --cov-report=html 
+
+# For now, just flake the tests until we have actual source code
+lint flake flake8:
+	.venv3/bin/flake8 tests/

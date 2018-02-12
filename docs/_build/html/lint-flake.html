@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Welcome to Scaffolding Serverless’s documentation! &#8212; Scaffolding Serverless 0.1 documentation</title>
+    <title>Linting with Flake8 &#8212; Scaffolding Serverless 0.1 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -23,7 +23,8 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Docs" href="docs.html" />
+    <link rel="next" title="Git Hooks" href="git-hooks.html" />
+    <link rel="prev" title="CI/CD" href="cicd.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -39,32 +40,17 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="welcome-to-scaffolding-serverless-s-documentation">
-<h1>Welcome to Scaffolding Serverless’s documentation!<a class="headerlink" href="#welcome-to-scaffolding-serverless-s-documentation" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="docs.html">Docs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="docs.html#install">Install</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs.html#building-docs">Building Docs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docs.html#editing-docs">Editing Docs</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cicd.html">CI/CD</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lint-flake.html">Linting with Flake8</a></li>
-<li class="toctree-l1"><a class="reference internal" href="git-hooks.html">Git Hooks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="todo.html">TODO</a></li>
-</ul>
-</div>
-</div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
-<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
-<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
-</ul>
+  <div class="section" id="linting-with-flake8">
+<h1>Linting with Flake8<a class="headerlink" href="#linting-with-flake8" title="Permalink to this headline">¶</a></h1>
+<p>We use <code class="docutils literal"><span class="pre">Flake8</span> <span class="pre">&lt;http://flake8.pycqa.org/en/latest/index.html&gt;`_</span> <span class="pre">to</span>
+<span class="pre">&quot;lint&quot;</span> <span class="pre">our</span> <span class="pre">code.</span> <span class="pre">Linting,</span> <span class="pre">from</span> <span class="pre">the</span> <span class="pre">``C</span></code> language, is an automatic
+inspection of code that looks for sloppy technique or other suspicious
+things.  It’s frequently used to enforce compliance to standard Python
+coding guidelines like <a class="reference external" href="https://www.python.org/dev/peps/pep-0008/">PEP8</a>.</p>
+<p>The run of Flake8 is configured by a <code class="docutils literal"><span class="pre">.flake8</span></code> file in the top
+directory.  We’ve tweaked it to allow 96-character long lines instead
+of the more restricive (and less readable) 72 characters PEP8
+recommends; in a world of big screens, 72 decreases readability.</p>
 </div>
 
 
@@ -75,8 +61,9 @@
         <div class="sphinxsidebarwrapper"><div class="relations">
 <h3>Related Topics</h3>
 <ul>
-  <li><a href="#">Documentation overview</a><ul>
-      <li>Next: <a href="docs.html" title="next chapter">Docs</a></li>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="cicd.html" title="previous chapter">CI/CD</a></li>
+      <li>Next: <a href="git-hooks.html" title="next chapter">Git Hooks</a></li>
   </ul></li>
 </ul>
 </div>
@@ -102,7 +89,7 @@
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
-      <a href="_sources/index.rst.txt"
+      <a href="_sources/lint-flake.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 

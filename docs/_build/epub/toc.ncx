@@ -60,6 +60,18 @@
     </navPoint>
     <navPoint id="navPoint9" playOrder="8">
       <navLabel>
+        <text>Linting with Flake8</text>
+      </navLabel>
+      <content src="lint-flake.xhtml" />  
+    </navPoint>
+    <navPoint id="navPoint10" playOrder="9">
+      <navLabel>
+        <text>Git Hooks</text>
+      </navLabel>
+      <content src="git-hooks.xhtml" />  
+    </navPoint>
+    <navPoint id="navPoint11" playOrder="10">
+      <navLabel>
         <text>TODO</text>
       </navLabel>
       <content src="todo.xhtml" />  

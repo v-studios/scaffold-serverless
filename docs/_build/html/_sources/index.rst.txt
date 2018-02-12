@@ -13,6 +13,8 @@ Welcome to Scaffolding Serverless's documentation!
    docs
    testing
    cicd
+   lint-flake
+   git-hooks
    todo
 
 
