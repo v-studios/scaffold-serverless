@@ -2,6 +2,9 @@
  README: Scaffold Serverless
 =============================
 
+.. image::  https://circleci.com/gh/v-studios/scaffold-serverless.svg?style=svg&circle-token=ce137f204153b1ed6098121c3d4cb42d287ea772
+   :target: https://circleci.com/gh/v-studios/scaffold-serverless
+
 This is a scaffold for Serverless projects using AWS and the
 Serverless Framework. It's intended to be a base for creating other
 projects, with all the tools you usually don't add until the very end

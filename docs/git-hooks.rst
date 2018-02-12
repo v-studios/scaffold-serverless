@@ -15,4 +15,12 @@ If you want to force a push, of untested, unlinted code, use the flag like::
 
   git push --no-verify
 
-and hang your head in shame.
+and hang your head shame in.
+
+I've created a build-badge for the top ``README.rst``.  On the
+CircleCI's projects page hit Settings for this project then Status
+Badges. Since this is a private repo, I had to crate a new token,
+which I called ``scaffold-serverless-build-badge``, then selected
+``reStructuredText`` and pasted the generated code in the README file.
+
+
