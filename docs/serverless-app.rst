@@ -24,5 +24,13 @@ in /usr/local/bin/).  Instead, we'll have to drill into our
 ``node_modules`` directory. Create a new `Serverless service
 <https://serverless.com/framework/docs/providers/aws/cli-reference/create/>`_::
 
-  ./node_modules/serverless/bin/serverless create --template aws-python3 --path crudite
-  
+  ./node_modules/serverless/bin/serverless create --template aws-python3 --path app
+
+Set your AWS Profile so you can create serverless resources, this is profile name::
+
+  export AWS_PROFILE=vstudios
+
+Go into the ``app`` directory and deploy the sample app::
+
+  ../node_modules/serverless/bin/serverless deploy
+
