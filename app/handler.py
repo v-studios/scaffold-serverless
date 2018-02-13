@@ -13,7 +13,7 @@ for b in ('boto', 'boto3', 'botocore'):
 DYNAMODB_UPLOAD_INFO_TABLE = environ['DYNAMODB_UPLOAD_INFO_TABLE']
 log.info('DYNAMODB_UPLOAD_INFO_TABLE={}'.format(DYNAMODB_UPLOAD_INFO_TABLE))
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('uploads-info-dev')
+table = dynamodb.Table(DYNAMODB_UPLOAD_INFO_TABLE)
 
 
 def s3upload(event, context):
