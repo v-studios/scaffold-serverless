@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="TODO" href="todo.html" />
+    <link rel="next" title="Linting with Flake8" href="lint-flake.html" />
     <link rel="prev" title="Testing" href="testing.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -69,7 +69,15 @@ can give the developer easy “make …” commands that are identical to
 what the CI system uses.</p>
 <p>When you commit and push – to any branch – CircleCI will build. You
 can check the status on the <a class="reference external" href="https://circleci.com/gh/v-studios/scaffold-serverless">CircleCI Dashboard</a>.</p>
+<div class="section" id="deploy-serverless-app-to-multiple-stage-environments">
+<h2>Deploy Serverless App to Multiple Stage Environments<a class="headerlink" href="#deploy-serverless-app-to-multiple-stage-environments" title="Permalink to this headline">¶</a></h2>
+<p>Create a new AWS IAM user <cite>circleci-scaffold-serverless</cite>, currently
+with Admin privs so it can create infrastructure. Grab the creds and
+paste them into the <a class="reference external" href="https://circleci.com/gh/v-studios/scaffold-serverless/edit#aws">CircleCI AWS settings for this project</a></p>
+<p>Setup .circleci/config.yml to build and test, then deploy.</p>
+<p>and grab the</p>
 <a class="reference internal image-reference" href="_images/cicd-dashboard.png"><img alt="_images/cicd-dashboard.png" src="_images/cicd-dashboard.png" style="width: 100%;" /></a>
+</div>
 </div>
 
 
@@ -82,7 +90,7 @@ can check the status on the <a class="reference external" href="https://circleci
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="testing.html" title="previous chapter">Testing</a></li>
-      <li>Next: <a href="todo.html" title="next chapter">TODO</a></li>
+      <li>Next: <a href="lint-flake.html" title="next chapter">Linting with Flake8</a></li>
   </ul></li>
 </ul>
 </div>

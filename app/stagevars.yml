@@ -1,0 +1,22 @@
+# Running only on your computer, no AWS resources, for testing, etc
+local:
+  # we have to have a legit region even here, for cloudformation endpoint
+  region: us-east-1
+
+# From 'develop' branch
+dev:
+  region: us-east-1
+
+# From 'release/*' branches
+qa:
+  # Just to be different, let's put it elsewhere
+  region: us-west-1
+
+# From 'master' branch
+prod:
+  region: us-east-1
+
+# From 'feature/*' branches, named after the committer's GitHub username
+
+shentonfreude:
+  region: us-east-1

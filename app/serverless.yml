@@ -1,17 +1,22 @@
 service: app
 frameworkVersion: "=1.26.0"
 
+custom:
+  stagevars: ${file(stagevars.yml)}
+
 provider:
   name: aws
   runtime: python3.6
-  stage: dev
-  region: us-east-1
+  stage: ${opt:stage, 'local'}       # default to 'local', 'dev' is more dangerous
+  #region: ${opt:region, self:custom.stagevars.${self:stage}.region} # region should come from stagevars.yml
+  region: ${opt:region, self:custom.stagevars.${self:provider.stage}.region} # region should come from stagevars.yml
+  environment:
+    DYNAMODB_UPLOAD_INFO_TABLE: 
+      Ref: uploadsInfoTable
   iamRoleStatements:
     - Effect: Allow
       Resource: 
-        Fn::GetAtt:
-          - uploadsInfoTable
-          - Arn
+        "Fn::GetAtt": [uploadsInfoTable, Arn]
       Action:
         - dynamodb:DescribeTable
         - dynamodb:Query
@@ -21,21 +26,13 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
 
-# you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:PutObject"
-#      Resource:
-#        Fn::Join:
-#          - ""
-#          - - "arn:aws:s3:::"
-#            - "Ref" : "ServerlessDeploymentBucket"
-#            - "/*"
+
+# plugins:
+#   - serverless-python-requirements
+#   - serverless-finch
+
+
+# TODO: env vars for DDB
 
 # you can define service wide environment variables here
 #  environment:
@@ -55,7 +52,7 @@ functions:
     handler: handler.s3upload
     events:
       - s3:
-          bucket: uploads-info-dev
+          bucket: uploads-info-${self:provider.stage}
           event: s3:ObjectCreated:*
           
 
@@ -83,7 +80,7 @@ resources:
     uploadsInfoTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: uploads-info-dev
+        TableName: uploads-info-${self:provider.stage}
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S

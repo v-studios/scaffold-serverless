@@ -42,7 +42,15 @@ can give the developer easy “make …” commands that are identical to
 what the CI system uses.</p>
 <p>When you commit and push – to any branch – CircleCI will build. You
 can check the status on the <a class="reference external" href="https://circleci.com/gh/v-studios/scaffold-serverless">CircleCI Dashboard</a><span class="link-target"> [https://circleci.com/gh/v-studios/scaffold-serverless]</span>.</p>
+<div class="section" id="deploy-serverless-app-to-multiple-stage-environments">
+<h2>Deploy Serverless App to Multiple Stage Environments</h2>
+<p>Create a new AWS IAM user <cite>circleci-scaffold-serverless</cite>, currently
+with Admin privs so it can create infrastructure. Grab the creds and
+paste them into the <a class="reference external" href="https://circleci.com/gh/v-studios/scaffold-serverless/edit#aws">CircleCI AWS settings for this project</a><span class="link-target"> [https://circleci.com/gh/v-studios/scaffold-serverless/edit#aws]</span></p>
+<p>Setup .circleci/config.yml to build and test, then deploy.</p>
+<p>and grab the</p>
 <img alt="_images/cicd-dashboard.png" src="_images/cicd-dashboard.png" style="width: 100%;" />
+</div>
 </div>
 
 

@@ -40,5 +40,17 @@ When you commit and push -- to any branch -- CircleCI will build. You
 can check the status on the `CircleCI Dashboard
 <https://circleci.com/gh/v-studios/scaffold-serverless>`_.
 
+Deploy Serverless App to Multiple Stage Environments
+====================================================
+
+Create a new AWS IAM user `circleci-scaffold-serverless`, currently
+with Admin privs so it can create infrastructure. Grab the creds and
+paste them into the `CircleCI AWS settings for this project
+<https://circleci.com/gh/v-studios/scaffold-serverless/edit#aws>`_
+
+Setup .circleci/config.yml to build and test, then deploy.
+
+and grab the
+
 .. image:: cicd-dashboard.png
    :width: 100%

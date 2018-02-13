@@ -57,20 +57,44 @@
         <text>CI/CD</text>
       </navLabel>
       <content src="cicd.xhtml" />  
+      <navPoint id="navPoint9" playOrder="7">
+        <navLabel>
+          <text>CI/CD</text>
+        </navLabel>
+        <content src="cicd.xhtml" />  
+      </navPoint>
+      <navPoint id="navPoint10" playOrder="8">
+        <navLabel>
+          <text>Deploy Serverless App to Multiple Stage Environments</text>
+        </navLabel>
+        <content src="cicd.xhtml#deploy-serverless-app-to-multiple-stage-environments" />  
+      </navPoint>
     </navPoint>
-    <navPoint id="navPoint9" playOrder="8">
+    <navPoint id="navPoint11" playOrder="9">
       <navLabel>
         <text>Linting with Flake8</text>
       </navLabel>
       <content src="lint-flake.xhtml" />  
     </navPoint>
-    <navPoint id="navPoint10" playOrder="9">
+    <navPoint id="navPoint12" playOrder="10">
       <navLabel>
         <text>Git Hooks</text>
       </navLabel>
       <content src="git-hooks.xhtml" />  
     </navPoint>
-    <navPoint id="navPoint11" playOrder="10">
+    <navPoint id="navPoint13" playOrder="11">
+      <navLabel>
+        <text>Serverless Crudite</text>
+      </navLabel>
+      <content src="serverless-app.xhtml" />  
+    </navPoint>
+    <navPoint id="navPoint14" playOrder="12">
+      <navLabel>
+        <text>Stage-based AWS Environments</text>
+      </navLabel>
+      <content src="stage-envs.xhtml" />  
+    </navPoint>
+    <navPoint id="navPoint15" playOrder="13">
       <navLabel>
         <text>TODO</text>
       </navLabel>

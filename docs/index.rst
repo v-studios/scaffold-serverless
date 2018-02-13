@@ -16,6 +16,7 @@ Welcome to Scaffolding Serverless's documentation!
    lint-flake
    git-hooks
    serverless-app
+   stage-envs
    todo
 
 

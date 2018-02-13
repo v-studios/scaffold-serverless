@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+  <head>
+    <meta charset="utf-8" />
+    <title>Stage-based AWS Environments</title>
+    <link rel="stylesheet" href="_static/epub.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" /> 
+  </head>
+  <body>
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="stage-based-aws-environments">
+<h1>Stage-based AWS Environments</h1>
+<p>We are creating separate AWS environmets for each “stage”, like “dev”,
+“qa”, and “prod”. We also create developer-specific environments that
+are used for their feature branches. This allows developers freedom to
+tinker without blowing away other developers’ work.</p>
+<p>The AWS environment – what Serverless calls “stage” – is based on the
+the <a class="reference external" href="http://nvie.com/posts/a-successful-git-branching-model/">GitFlow model</a><span class="link-target"> [http://nvie.com/posts/a-successful-git-branching-model/]</span>.
+The stage name is based on the Git branch that’s being processed:</p>
+<table class="docutils">
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 33%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Branch</p></th>
+<th class="head"><p>Stage Environment</p></th>
+<th class="head"><p>Comment</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>(any)</p></td>
+<td><p>local</p></td>
+<td><p>Work on your computer only</p></td>
+</tr>
+<tr class="row-odd"><td><p>feature/*</p></td>
+<td><p>$CIRCLE_USERNAME</p></td>
+<td><p>Feature Branches build an
+environment named for your
+GitHub username</p></td>
+</tr>
+<tr class="row-even"><td><p>develop</p></td>
+<td><p>dev</p></td>
+<td><p>Default stage name for the
+Serverless Framework</p></td>
+</tr>
+<tr class="row-odd"><td><p>release/*</p></td>
+<td><p>qa</p></td>
+<td><p>Quality Assurance checks are
+done before release to
+production</p></td>
+</tr>
+<tr class="row-even"><td><p>master</p></td>
+<td><p>prod</p></td>
+<td><p>The conventional name for
+production systems</p></td>
+</tr>
+</tbody>
+</table>
+<p>Note that “master” and “develop” branches get fixed stage names “prod”
+and “dev” respectively. “release/” branches use the “qa” stage
+config. “feature/” branch, like
+“feature/cs/VW-525_create_cicd_framework” uses a stage name based on
+the $CIRCLE_USERNAME variable which is the same as the developer’s
+GitHub username – in my case, “shentonfreude”.</p>
+<p>Variables specific to each Serverless “stage” are in
+<a class="reference external" href="stage_vars.yml">stagevars.yml</a>. In that file, we have
+<code class="docutils literal"><span class="pre">.yml</span></code> sections named for each stage. Some tweaks to the
+environment are done in <a class="reference external" href="serverless.yml">serverless.yml</a>, like
+suffixing the stage name to S3 buckets or DynamoDB tables to ensure
+uniqueness across all environments.</p>
+<p>The developer-specific stage allows all developers to have their own
+AWS environment and prevents one developer from breaking the work of
+another. Since Serverless resources – Lambda, S3 and DynamoDB – are
+very inexpensive to run, this is a minimal cost.  (If we had ELB, EC2,
+and RDS resources, we might not do this due to the high cost).</p>
+<p>While we expect to use CI/CD to deploy, if you want to deploy the
+Serverless code manually, you should use a stage name that equals your
+GitHub username. This way, you’ll have your own environment, one
+that’s also used by your feature branches. Like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">../</span><span class="n">node_modules</span><span class="o">/</span><span class="n">serverless</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">serverless</span> <span class="n">deploy</span> <span class="o">--</span><span class="n">stage</span><span class="o">=</span><span class="n">shentonfreude</span> <span class="o">--</span><span class="n">verbose</span>
+</pre></div>
+</div>
+<p>The “qa” stage, based on a “release/*” branch, allows us to continue
+work on the “development” branch while we allow stake holders (e.g.,
+customers) to review what we expect to deploy to production soon.</p>
+</div>
+
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  </body>
+</html>
