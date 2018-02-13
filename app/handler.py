@@ -1,15 +1,19 @@
 import logging
+from os import environ
 from urllib.parse import unquote_plus
-import boto3
 
-dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('uploads-info-dev')
+import boto3
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 for b in ('boto', 'boto3', 'botocore'):
     logging.getLogger(b).setLevel(logging.WARNING)
+
+DYNAMODB_UPLOAD_INFO_TABLE = environ['DYNAMODB_UPLOAD_INFO_TABLE']
+log.info('DYNAMODB_UPLOAD_INFO_TABLE={}'.format(DYNAMODB_UPLOAD_INFO_TABLE))
+dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table('uploads-info-dev')
 
 
 def s3upload(event, context):

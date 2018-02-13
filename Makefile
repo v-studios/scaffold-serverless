@@ -21,8 +21,8 @@ docs doc: .venv3/bin/sphinx-build
 # .PHONY forces it to run, instead of treating the `tests` directory as a built thing
 .PHONY: tests
 tests test: .venv3/bin/pytest .venv3/bin/coverage
-	.venv3/bin/pytest --junit-xml=test-results/junit/junit.xml --cov=crudite --cov-report=term --cov-report=html 
+	.venv3/bin/pytest --junit-xml=test-results/junit/junit.xml --cov=app --cov-report=term --cov-report=html 
 
 # For now, just flake the tests until we have actual source code
 lint flake flake8:
-	.venv3/bin/flake8 crudite/
+	.venv3/bin/flake8 app/
