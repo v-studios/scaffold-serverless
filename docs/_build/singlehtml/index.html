@@ -162,7 +162,15 @@ can give the developer easy “make …” commands that are identical to
 what the CI system uses.</p>
 <p>When you commit and push – to any branch – CircleCI will build. You
 can check the status on the <a class="reference external" href="https://circleci.com/gh/v-studios/scaffold-serverless">CircleCI Dashboard</a>.</p>
+<div class="section" id="deploy-serverless-app-to-multiple-stage-environments">
+<h3>Deploy Serverless App to Multiple Stage Environments<a class="headerlink" href="#deploy-serverless-app-to-multiple-stage-environments" title="Permalink to this headline">¶</a></h3>
+<p>Create a new AWS IAM user <cite>circleci-scaffold-serverless</cite>, currently
+with Admin privs so it can create infrastructure. Grab the creds and
+paste them into the <a class="reference external" href="https://circleci.com/gh/v-studios/scaffold-serverless/edit#aws">CircleCI AWS settings for this project</a></p>
+<p>Setup .circleci/config.yml to build and test, then deploy.</p>
+<p>and grab the</p>
 <a class="reference internal image-reference" href="_images/cicd-dashboard.png"><img alt="_images/cicd-dashboard.png" src="_images/cicd-dashboard.png" style="width: 100%;" /></a>
+</div>
 </div>
 <span id="document-lint-flake"></span><div class="section" id="linting-with-flake8">
 <h2>Linting with Flake8<a class="headerlink" href="#linting-with-flake8" title="Permalink to this headline">¶</a></h2>
@@ -188,7 +196,123 @@ through. Fix your code, commit, and try again.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">push</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">verify</span>
 </pre></div>
 </div>
-<p>and hang your head in shame.</p>
+<p>and hang your head shame in.</p>
+<p>I’ve created a build-badge for the top <code class="docutils literal"><span class="pre">README.rst</span></code>.  On the
+CircleCI’s projects page hit Settings for this project then Status
+Badges. Since this is a private repo, I had to crate a new token,
+which I called <code class="docutils literal"><span class="pre">scaffold-serverless-build-badge</span></code>, then selected
+<code class="docutils literal"><span class="pre">reStructuredText</span></code> and pasted the generated code in the README file.</p>
+</div>
+<span id="document-serverless-app"></span><div class="section" id="serverless-crudite">
+<h2>Serverless Crudite<a class="headerlink" href="#serverless-crudite" title="Permalink to this headline">¶</a></h2>
+<p>We create a sample CRUD app that should allow file upload, extraction
+of simple metadata, publishing the metadata to a database, viewing and
+editing the information.</p>
+<p>Pick a recent Node version:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">nvm</span> <span class="n">use</span> <span class="mf">9.2</span><span class="o">.</span><span class="mi">0</span>
+</pre></div>
+</div>
+<p>I created an initial <code class="docutils literal"><span class="pre">package.json</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">npm</span> <span class="n">init</span>
+</pre></div>
+</div>
+<p>then installed the Serverles framework locally:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">npm</span> <span class="n">install</span> <span class="o">--</span><span class="n">save</span> <span class="n">serverless</span>
+</pre></div>
+</div>
+<p>Perhaps I’m using <code class="docutils literal"><span class="pre">npm</span></code> wrong but it feels dangerous doing a global
+install of serverless to get the <code class="docutils literal"><span class="pre">sls</span></code> command (which is installed
+in /usr/local/bin/).  Instead, we’ll have to drill into our
+<code class="docutils literal"><span class="pre">node_modules</span></code> directory. Create a new <a class="reference external" href="https://serverless.com/framework/docs/providers/aws/cli-reference/create/">Serverless service</a>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">node_modules</span><span class="o">/</span><span class="n">serverless</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">serverless</span> <span class="n">create</span> <span class="o">--</span><span class="n">template</span> <span class="n">aws</span><span class="o">-</span><span class="n">python3</span> <span class="o">--</span><span class="n">path</span> <span class="n">app</span>
+</pre></div>
+</div>
+<p>Set your AWS Profile so you can create serverless resources, this is profile name:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">AWS_PROFILE</span><span class="o">=</span><span class="n">vstudios</span>
+</pre></div>
+</div>
+<p>Go into the <code class="docutils literal"><span class="pre">app</span></code> directory and deploy the sample app:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">../</span><span class="n">node_modules</span><span class="o">/</span><span class="n">serverless</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">serverless</span> <span class="n">deploy</span>
+</pre></div>
+</div>
+</div>
+<span id="document-stage-envs"></span><div class="section" id="stage-based-aws-environments">
+<h2>Stage-based AWS Environments<a class="headerlink" href="#stage-based-aws-environments" title="Permalink to this headline">¶</a></h2>
+<p>We are creating separate AWS environmets for each “stage”, like “dev”,
+“qa”, and “prod”. We also create developer-specific environments that
+are used for their feature branches. This allows developers freedom to
+tinker without blowing away other developers’ work.</p>
+<p>The AWS environment – what Serverless calls “stage” – is based on the
+the <a class="reference external" href="http://nvie.com/posts/a-successful-git-branching-model/">GitFlow model</a>.
+The stage name is based on the Git branch that’s being processed:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="33%" />
+<col width="45%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Branch</th>
+<th class="head">Stage Environment</th>
+<th class="head">Comment</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>(any)</td>
+<td>local</td>
+<td>Work on your computer only</td>
+</tr>
+<tr class="row-odd"><td>feature/*</td>
+<td>$CIRCLE_USERNAME</td>
+<td>Feature Branches build an
+environment named for your
+GitHub username</td>
+</tr>
+<tr class="row-even"><td>develop</td>
+<td>dev</td>
+<td>Default stage name for the
+Serverless Framework</td>
+</tr>
+<tr class="row-odd"><td>release/*</td>
+<td>qa</td>
+<td>Quality Assurance checks are
+done before release to
+production</td>
+</tr>
+<tr class="row-even"><td>master</td>
+<td>prod</td>
+<td>The conventional name for
+production systems</td>
+</tr>
+</tbody>
+</table>
+<p>Note that “master” and “develop” branches get fixed stage names “prod”
+and “dev” respectively. “release/” branches use the “qa” stage
+config. “feature/” branch, like
+“feature/cs/VW-525_create_cicd_framework” uses a stage name based on
+the $CIRCLE_USERNAME variable which is the same as the developer’s
+GitHub username – in my case, “shentonfreude”.</p>
+<p>Variables specific to each Serverless “stage” are in
+<a class="reference external" href="stage_vars.yml">stagevars.yml</a>. In that file, we have
+<code class="docutils literal"><span class="pre">.yml</span></code> sections named for each stage. Some tweaks to the
+environment are done in <a class="reference external" href="serverless.yml">serverless.yml</a>, like
+suffixing the stage name to S3 buckets or DynamoDB tables to ensure
+uniqueness across all environments.</p>
+<p>The developer-specific stage allows all developers to have their own
+AWS environment and prevents one developer from breaking the work of
+another. Since Serverless resources – Lambda, S3 and DynamoDB – are
+very inexpensive to run, this is a minimal cost.  (If we had ELB, EC2,
+and RDS resources, we might not do this due to the high cost).</p>
+<p>While we expect to use CI/CD to deploy, if you want to deploy the
+Serverless code manually, you should use a stage name that equals your
+GitHub username. This way, you’ll have your own environment, one
+that’s also used by your feature branches. Like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">../</span><span class="n">node_modules</span><span class="o">/</span><span class="n">serverless</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">serverless</span> <span class="n">deploy</span> <span class="o">--</span><span class="n">stage</span><span class="o">=</span><span class="n">shentonfreude</span> <span class="o">--</span><span class="n">verbose</span>
+</pre></div>
+</div>
+<p>The “qa” stage, based on a “release/*” branch, allows us to continue
+work on the “development” branch while we allow stake holders (e.g.,
+customers) to review what we expect to deploy to production soon.</p>
 </div>
 <span id="document-todo"></span><div class="section" id="todo">
 <h2>TODO<a class="headerlink" href="#todo" title="Permalink to this headline">¶</a></h2>
