@@ -92,23 +92,27 @@ jobs:
             case "${CIRCLE_BRANCH}" in
               master)
                 echo "Deploying to stage prod"
+                cd app
                 #node_modules/.bin/sls client deploy --stage prod --region us-east-1
-                node_modules/.bin/sls deploy --stage prod
+                ../node_modules/.bin/sls deploy --stage prod
                 ;;
               release/*)
                 echo "Deploying to stage qa"
+                cd app
                 #node_modules/.bin/sls client deploy --stage qa --region us-east-1
-                node_modules/.bin/sls deploy --stage qa
+                ../node_modules/.bin/sls deploy --stage qa
                 ;;
               develop)
                 echo "Deploying to stage dev"
+                cd app
                 #node_modules/.bin/sls client deploy --stage dev --region ap-southeast-1
-                node_modules/.bin/sls deploy --stage dev
+                ../node_modules/.bin/sls deploy --stage dev
                 ;;
               feature/*)
                 echo "Deploying to stage ${CIRCLE_USERNAME}"
+                cd app
                 #node_modules/.bin/sls client deploy --stage ${CIRCLE_USERNAME} --region ap-southeast-1
-                node_modules/.bin/sls deploy --stage ${CIRCLE_USERNAME}
+                ../node_modules/.bin/sls deploy --stage ${CIRCLE_USERNAME}
                 ;;
               *)
                 echo "ERROR: unrecognized CIRCLE_BRANCH=${CIRCLE_BRANCH}"
