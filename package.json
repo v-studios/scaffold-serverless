@@ -1,0 +1,34 @@
+{
+  "name": "scaffolding-serverless-crudite",
+  "version": "0.1.0",
+  "description": "Serverless CRUD app with file uploads",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/v-studios/scaffold-serverless.git"
+  },
+  "keywords": [
+    "serverless",
+    "python",
+    "aws",
+    "crud",
+    "dynamodb",
+    "s3"
+  ],
+  "author": "Chris Shenton",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/v-studios/scaffold-serverless/issues"
+  },
+  "homepage": "https://github.com/v-studios/scaffold-serverless#readme",
+  "dependencies": {
+    "serverless": "^1.26.0"
+  }
+}

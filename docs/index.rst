@@ -15,6 +15,7 @@ Welcome to Scaffolding Serverless's documentation!
    cicd
    lint-flake
    git-hooks
+   serverless-app
    todo
 
 

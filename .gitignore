@@ -4,6 +4,6 @@ htmlcov/
 __pycache__/
 *.py[cod]
 *~
-
+node_modules/
 .python-version
 test-results/

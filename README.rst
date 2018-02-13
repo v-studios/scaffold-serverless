@@ -40,7 +40,7 @@ This will evolve over time and grow features, I hope. But the main
 point is to get the exostructure (tests, CI/CD, docs) working, since
 that's the boring stuff everyone avoids.
 
-For details on each feature, head to the docs/ directory.
+For details on each feature, head to the `docs/ <docs/>`_ directory.
 
 .. image:: scaffolding-pompei.jpg
    :width: 100%
