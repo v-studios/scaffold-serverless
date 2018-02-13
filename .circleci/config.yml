@@ -61,7 +61,7 @@ jobs:
           destination: built-docs
           
   # Deploy Lambda, S3, DynamoDB needs AWS creds in Project AWS setting:
-  # https://circleci.com/gh/v-studios/vmessage-sls/edit#aws
+  # https://circleci.com/gh/v-studios/scaffold-serverless
   slsdeploy:
     docker:
       - image: circleci/python:3.6.4-stretch-node
@@ -92,22 +92,22 @@ jobs:
             case "${CIRCLE_BRANCH}" in
               master)
                 echo "Deploying to stage prod"
-                node_modules/.bin/sls client deploy --stage prod --region us-east-1
+                #node_modules/.bin/sls client deploy --stage prod --region us-east-1
                 node_modules/.bin/sls deploy --stage prod
                 ;;
               release/*)
                 echo "Deploying to stage qa"
-                node_modules/.bin/sls client deploy --stage qa --region us-east-1
+                #node_modules/.bin/sls client deploy --stage qa --region us-east-1
                 node_modules/.bin/sls deploy --stage qa
                 ;;
               develop)
                 echo "Deploying to stage dev"
-                node_modules/.bin/sls client deploy --stage dev --region ap-southeast-1
+                #node_modules/.bin/sls client deploy --stage dev --region ap-southeast-1
                 node_modules/.bin/sls deploy --stage dev
                 ;;
               feature/*)
                 echo "Deploying to stage ${CIRCLE_USERNAME}"
-                node_modules/.bin/sls client deploy --stage ${CIRCLE_USERNAME} --region ap-southeast-1
+                #node_modules/.bin/sls client deploy --stage ${CIRCLE_USERNAME} --region ap-southeast-1
                 node_modules/.bin/sls deploy --stage ${CIRCLE_USERNAME}
                 ;;
               *)
@@ -121,9 +121,9 @@ workflows:
   pytest_slsdeploy:
     jobs:
       - pytest
-      # - slsdeploy:
-      #     requires:
-      #       - pytest
+      - slsdeploy:
+          requires:
+            - pytest
               
 
           
