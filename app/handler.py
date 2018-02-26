@@ -30,7 +30,7 @@ def s3upload(event, context):
         size = int(obj['size'])
         etag = obj.get('eTag')  # upload gives eTag but copy does not
         log.info('bucket={} key={} size={} etag={}'.format(s3name, key, size, etag))
-        res = table.put_item(Item={'id': key, 'size': size, 'etag': etag})
+        res = table.put_item(Item={'id': key, 'bucket': s3name, 'size': size, 'etag': etag})
         if res['ResponseMetadata']['HTTPStatusCode'] != 200:
             log.error('Putting item to DynamoDB res={}'.format(res))
 
