@@ -35,8 +35,8 @@ def s3upload(event, context):
             log.error('Putting item to DynamoDB res={}'.format(res))
 
 
-def get_upload_psk(event, context):
-    """Return a presigned key URL to POST a file to.
+def get_upload_url(event, context):
+    """Return a presigned URL to PUT a file to in our S3 bucket.
 
     Test like:
         curl -i  "$urlget"?filename=ALEX.JPG
@@ -44,8 +44,6 @@ def get_upload_psk(event, context):
     then set a variable 'url' to the returned value, and upload:
         curl -v --upload-file ~/Pictures/alex.jpg "$url"
     """
-    # TODO: accept form fields like: curl --form filename=ALEX.JPG
-    # May have to do with a POST Lambda handler
     log.debug('event={}'.format(json.dumps(event)))
     log.debug('context aws_request_id={}'.format(context.aws_request_id))
     filename = event['queryStringParameters'].get('filename')
