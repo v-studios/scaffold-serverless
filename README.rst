@@ -24,11 +24,11 @@ projects, with all the tools you usually don't add until the very end
 The application isn't terribly important but ideally should include
 common use cases, so here are a few features I can think of:
 
-* authentication: with Cognito, so we get social media auth
-* modern web ui: with Angular2+ served from S3
 * api: allowing GET, POST
 * uploading media: to S3, perhaps with presigned URL
 * uploading form data: to DynamoDB
+* authentication: with Cognito, so we get social media auth
+* modern web ui: with Angular2+ served from S3
 
 To show the features of Serverless, we probably should include some
 triggers from (say) S3 uploads to populate the database.

@@ -17,6 +17,7 @@ Welcome to Scaffolding Serverless's documentation!
    git-hooks
    serverless-app
    stage-envs
+   api
    todo
 
 

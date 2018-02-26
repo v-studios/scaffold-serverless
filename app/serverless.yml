@@ -8,11 +8,11 @@ provider:
   name: aws
   runtime: python3.6
   stage: ${opt:stage, 'local'}       # default to 'local', 'dev' is more dangerous
-  #region: ${opt:region, self:custom.stagevars.${self:stage}.region} # region should come from stagevars.yml
   region: ${opt:region, self:custom.stagevars.${self:provider.stage}.region} # region should come from stagevars.yml
   environment:
     DYNAMODB_UPLOAD_INFO_TABLE: 
       Ref: uploadsInfoTable
+    UPLOAD_BUCKET_NAME: uploads-info-${self:provider.stage}
   iamRoleStatements:
     - Effect: Allow
       Resource: 
@@ -25,27 +25,12 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-
-
-# plugins:
-#   - serverless-python-requirements
-#   - serverless-finch
-
-
-# TODO: env vars for DDB
-
-# you can define service wide environment variables here
-#  environment:
-#    variable1: value1
-
-# you can add packaging information here
-#package:
-#  include:
-#    - include-me.py
-#    - include-me-dir/**
-#  exclude:
-#    - exclude-me.py
-#    - exclude-me-dir/**
+    - Effect: Allow
+      Resource: arn:aws:s3:::uploads-info-${self:provider.stage}/*
+      Action:
+        - s3:PutObject
+        - s3:PutObjectAcl
+        - s3:PutObjectTagging
 
 functions:
   s3upload:
@@ -54,29 +39,14 @@ functions:
       - s3:
           bucket: uploads-info-${self:provider.stage}
           event: s3:ObjectCreated:*
-          
-
-#    events:
-#      - http:
-#          path: users/create
-#          method: get
-#      - s3: ${env:BUCKET}
-#      - stream: arn:aws:dynamodb:region:XXXXXX:table/foo/stream/1970-01-01T00:00:00.000
-#      - cognitoUserPool:
-#          pool: MyUserPool
-#          trigger: PreSignUp
-
-#    Define function environment variables here
-#    environment:
-#      variable2: value2
-
+  getUploadURL:
+    handler: handler.get_upload_url
+    events:
+      - http: GET /upload_url
+        
 resources:
   Resources:
     # Don't spec the upload bucket here, the Handler spec will create it
-    # uploadsInfoBucket:
-    #   Type: AWS::S3::Bucket
-    #   Properties:
-    #     BucketName: uploads-info-dev
     uploadsInfoTable:
       Type: AWS::DynamoDB::Table
       Properties:
@@ -90,6 +60,19 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+
+# plugins:
+#   - serverless-python-requirements
+#   - serverless-finch
+
+# you can add packaging information here
+#package:
+#  include:
+#    - include-me.py
+#    - include-me-dir/**
+#  exclude:
+#    - exclude-me.py
+#    - exclude-me-dir/**
 
 #  Outputs:
 #     NewOutput:
