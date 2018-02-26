@@ -43,7 +43,11 @@ functions:
     handler: handler.get_upload_url
     events:
       - http: GET /upload_url
-        
+  getAssets:                    # JSON, or HTML if "Accepts: text/html"
+    handler: handler.get_assets
+    events:
+      - http:  GET /assets
+
 resources:
   Resources:
     # Don't spec the upload bucket here, the Handler spec will create it
