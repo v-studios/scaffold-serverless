@@ -13,6 +13,7 @@ provider:
   environment:
     DYNAMODB_UPLOAD_INFO_TABLE: 
       Ref: uploadsInfoTable
+    UPLOAD_BUCKET_NAME: uploads-info-${self:provider.stage}
   iamRoleStatements:
     - Effect: Allow
       Resource: 
@@ -25,7 +26,12 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-
+    - Effect: Allow
+      Resource: arn:aws:s3:::uploads-info-${self:provider.stage}/*
+      Action:
+        - s3:PutObject
+        - s3:PutObjectAcl
+        - s3:PutObjectTagging
 
 # plugins:
 #   - serverless-python-requirements
@@ -54,7 +60,11 @@ functions:
       - s3:
           bucket: uploads-info-${self:provider.stage}
           event: s3:ObjectCreated:*
-          
+  getUploadPSK:
+    handler: handler.get_upload_psk
+    events:
+      - http: GET /upload_psk
+        
 
 #    events:
 #      - http:
