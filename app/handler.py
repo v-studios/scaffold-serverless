@@ -59,4 +59,3 @@ def get_upload_url(event, context):
     log.info('url={}'.format(url))
     return {'statusCode': 200,
             'body': json.dumps({'url': url})}
-
