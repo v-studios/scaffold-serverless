@@ -46,7 +46,7 @@ functions:
   getAssets:                    # JSON, or HTML if "Accepts: text/html"
     handler: handler.get_assets
     events:
-      - http:  GET /assets
+      - http: GET /assets
 
 resources:
   Resources:

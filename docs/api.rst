@@ -65,3 +65,26 @@ The Lambda must be given permissions for the presigned URL to allow the upload::
         - s3:PutObjectTagging
 
 
+GET /assets
+===========
+
+Return info about the assets from the DynamoDB table, as JSON or if
+'text/html' is in the request's Accept header, as HTML.
+
+It's naive and just does a table scan, which is expensive and stupid
+but will be OK for this toy demo (unless we get a lot of items).
+
+I had to fight with DynamoDB to turn numerics returned by boto3
+as ``decimal.Decimal`` types into plain old ``int`` so JSON could
+render them.
+
+serverless.yml
+--------------
+
+The endpoint is specified in ``serverless.yml`` and we don't have any
+new permissions to add::
+
+  getAssets:                    # JSON, or HTML if "Accepts: text/html"
+    handler: handler.get_assets
+    events:
+      - http:  GET /assets
