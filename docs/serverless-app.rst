@@ -1,6 +1,6 @@
-====================
- Serverless Crudite
-====================
+================
+ Serverless App
+================
 
 We create a sample CRUD app that should allow file upload, extraction
 of simple metadata, publishing the metadata to a database, viewing and
