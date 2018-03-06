@@ -1,0 +1,168 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>API &#8212; Scaffolding Serverless 0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="TODO" href="todo.html" />
+    <link rel="prev" title="Stage-based AWS Environments" href="stage-envs.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="api">
+<h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
+<p>We’ve added an API, using <a class="reference external" href="https://aws.amazon.com/api-gateway/">API Gateway</a> so we can handle web
+requests. These endpoints are defined in the serverless.yml file, and
+specify the URL path, method, and handler to invoke.</p>
+<div class="section" id="get-upload-url">
+<h2>GET /upload_url<a class="headerlink" href="#get-upload-url" title="Permalink to this headline">¶</a></h2>
+<p>Get a presigned key URL that we can use to PUT the file to do an upload.</p>
+<p>Ideally we would like a web page that presents an upload form. It
+would first GET a presigned URL from the API, then the browser would
+directly PUT the file to that URL. This prevents tying up the API
+server with potentially long and large upload files.</p>
+<p>Until we have a web page and Angular code to handle the form, response
+and upload, we’ll use <code class="docutils literal"><span class="pre">curl</span></code>.</p>
+<p>First, find the API endpoint based on your stage:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>\<span class="o">../</span><span class="n">node_modules</span><span class="o">/.</span><span class="n">bin</span><span class="o">/</span><span class="n">sls</span> <span class="n">info</span> <span class="o">--</span><span class="n">stage</span> <span class="n">shentonfreude</span>
+</pre></div>
+</div>
+<p>I then set a variable for the URL to make it easy to refer to:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">urlget</span><span class="o">=</span><span class="s2">&quot;https://WHATEVER.execute-api.us-east-1.amazonaws.com/shentonfreude/upload_url&quot;</span>
+</pre></div>
+</div>
+<p>Get a presigned URL from the API, specifying the name of your file as
+a querystring param:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>curl $urlget?filename=ALEX.JPG
+
+{&quot;url&quot;: &quot;https://uploads-info-shentonfreude.s3.amazonaws.com/ALEX.JPG?AWSAccessKeyId=...&quot;}
+</pre></div>
+</div>
+<p>Set a variable to that long URL for convenience:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://uploads-info-shentonfreude.s3.amazonaws.com/ALEX.JPG?AWSAccessKeyId=...&quot;</span>
+</pre></div>
+</div>
+<p>Then PUT a file to that URL:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>curl -i --upload-file ~/Pictures/alex.jpg $url
+</pre></div>
+</div>
+<div class="section" id="serverless-yml">
+<h3>serverless.yml<a class="headerlink" href="#serverless-yml" title="Permalink to this headline">¶</a></h3>
+<p>We define the function and handler together:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">getUploadPSK</span><span class="p">:</span>
+<span class="n">handler</span><span class="p">:</span> <span class="n">handler</span><span class="o">.</span><span class="n">get_upload_url</span>
+<span class="n">events</span><span class="p">:</span>
+  <span class="o">-</span> <span class="n">http</span><span class="p">:</span> <span class="n">GET</span> <span class="o">/</span><span class="n">upload_url</span>
+</pre></div>
+</div>
+<p>The Lambda must be given permissions for the presigned URL to allow the upload:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>iamRoleStatements:
+  - Effect: Allow
+    Resource: arn:aws:s3:::uploads-info-${self:provider.stage}/*
+    Action:
+      - s3:PutObject
+      - s3:PutObjectAcl
+      - s3:PutObjectTagging
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="get-assets">
+<h2>GET /assets<a class="headerlink" href="#get-assets" title="Permalink to this headline">¶</a></h2>
+<p>Return info about the assets from the DynamoDB table, as JSON or if
+‘text/html’ is in the request’s Accept header, as HTML.</p>
+<p>It’s naive and just does a table scan, which is expensive and stupid
+but will be OK for this toy demo (unless we get a lot of items).</p>
+<p>I had to fight with DynamoDB to turn numerics returned by boto3
+as <code class="docutils literal"><span class="pre">decimal.Decimal</span></code> types into plain old <code class="docutils literal"><span class="pre">int</span></code> so JSON could
+render them.</p>
+<div class="section" id="id1">
+<h3>serverless.yml<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>The endpoint is specified in <code class="docutils literal"><span class="pre">serverless.yml</span></code> and we don’t have any
+new permissions to add:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">getAssets</span><span class="p">:</span>                    <span class="c1"># JSON, or HTML if &quot;Accepts: text/html&quot;</span>
+  <span class="n">handler</span><span class="p">:</span> <span class="n">handler</span><span class="o">.</span><span class="n">get_assets</span>
+  <span class="n">events</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">http</span><span class="p">:</span>  <span class="n">GET</span> <span class="o">/</span><span class="n">assets</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="stage-envs.html" title="previous chapter">Stage-based AWS Environments</a></li>
+      <li>Next: <a href="todo.html" title="next chapter">TODO</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Chris Shenton.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/api.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
