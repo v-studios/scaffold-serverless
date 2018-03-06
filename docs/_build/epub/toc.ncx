@@ -2,7 +2,7 @@
 <ncx version="2005-1" xmlns="http://www.daisy.org/z3986/2005/ncx/">
   <head>
     <meta name="dtb:uid" content="unknown"/>
-    <meta name="dtb:depth" content="2"/>
+    <meta name="dtb:depth" content="3"/>
     <meta name="dtb:totalPageCount" content="0"/>
     <meta name="dtb:maxPageNumber" content="0"/>
   </head>
@@ -12,7 +12,7 @@
   <navMap>    
     <navPoint id="navPoint1" playOrder="1">
       <navLabel>
-        <text>Welcome to Scaffolding Serverless’s documentation!</text>
+        <text>A Scaffolding for Serverless</text>
       </navLabel>
       <content src="index.xhtml" />  
     </navPoint>
@@ -95,6 +95,54 @@
       <content src="stage-envs.xhtml" />  
     </navPoint>
     <navPoint id="navPoint15" playOrder="13">
+      <navLabel>
+        <text>API</text>
+      </navLabel>
+      <content src="api.xhtml" />  
+      <navPoint id="navPoint16" playOrder="13">
+        <navLabel>
+          <text>API</text>
+        </navLabel>
+        <content src="api.xhtml" />  
+      </navPoint>
+      <navPoint id="navPoint17" playOrder="14">
+        <navLabel>
+          <text>GET /upload_url</text>
+        </navLabel>
+        <content src="api.xhtml#get-upload-url" />  
+        <navPoint id="navPoint18" playOrder="14">
+          <navLabel>
+            <text>GET /upload_url</text>
+          </navLabel>
+          <content src="api.xhtml#get-upload-url" />  
+        </navPoint>
+        <navPoint id="navPoint19" playOrder="15">
+          <navLabel>
+            <text>serverless.yml</text>
+          </navLabel>
+          <content src="api.xhtml#serverless-yml" />  
+        </navPoint>
+      </navPoint>
+      <navPoint id="navPoint20" playOrder="16">
+        <navLabel>
+          <text>GET /assets</text>
+        </navLabel>
+        <content src="api.xhtml#get-assets" />  
+        <navPoint id="navPoint21" playOrder="16">
+          <navLabel>
+            <text>GET /assets</text>
+          </navLabel>
+          <content src="api.xhtml#get-assets" />  
+        </navPoint>
+        <navPoint id="navPoint22" playOrder="17">
+          <navLabel>
+            <text>serverless.yml</text>
+          </navLabel>
+          <content src="api.xhtml#id1" />  
+        </navPoint>
+      </navPoint>
+    </navPoint>
+    <navPoint id="navPoint23" playOrder="18">
       <navLabel>
         <text>TODO</text>
       </navLabel>
