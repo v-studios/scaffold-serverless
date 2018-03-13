@@ -10,18 +10,4 @@
     </li>
 </ul>
 
-<div *ngIf="selectedUpload">
-    <h2>Details: {{ selectedUpload.id }}</h2>
-    <div>
-        <div>size: {{selectedUpload.size}}</div>
-        <div>bucket: {{selectedUpload.bucket}}</div>
-        <div>etag: {{selectedUpload.etag}}</div>
-        <div>comment: {{selectedUpload.comment}}</div>
-    </div>
-    <div>
-        <label>update comment: 
-            <input [(ngModel)]="selectedUpload.comment" placeholder="update comment">
-        </label>
-    </div>
-
-</div>
+<app-upload-detail [upload]="selectedUpload"></app-upload-detail>

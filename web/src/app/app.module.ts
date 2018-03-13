@@ -5,12 +5,14 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { UploadsComponent } from './uploads/uploads.component';
+import { UploadDetailComponent } from './upload-detail/upload-detail.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    UploadsComponent
+    UploadsComponent,
+    UploadDetailComponent
   ],
   imports: [
     BrowserModule,
