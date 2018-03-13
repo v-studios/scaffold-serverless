@@ -19,7 +19,7 @@ A Scaffolding for Serverless
    stage-envs
    api
    todo
-
+   angular-web-frontend
 
 Indices and tables
 ==================
