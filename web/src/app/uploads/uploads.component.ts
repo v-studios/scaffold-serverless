@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Upload } from '../upload';
-import { UPLOADS } from '../mock-uploads';
+import { UploadService } from '../upload.service';
+
 
 @Component({
   selector: 'app-uploads',
@@ -10,16 +11,22 @@ import { UPLOADS } from '../mock-uploads';
 })
 export class UploadsComponent implements OnInit {
 
-  constructor() { }
+  constructor(private uploadService: UploadService) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.getUploads();
+  }
 
-  uploads = UPLOADS;
+  uploads: Upload[]
 
   selectedUpload: Upload;
 
   onSelect(upload: Upload): void {
     this.selectedUpload = upload;
+  }
+
+  getUploads(): void {
+    this.uploadService.getUploads().subscribe(uploads => this.uploads = uploads);
   }
 
 }
