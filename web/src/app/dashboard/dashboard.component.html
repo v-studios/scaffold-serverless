@@ -1,12 +1,11 @@
 <h3>TODO "Recent" Uploads</h3>
 
 <div class="grid grid-pad">
-    <a *ngFor="let upload of uploads"
-       class="col-1-4"
-       routerLink="/detail/{{upload.id}}"
-    >
+    <a *ngFor="let upload of uploads" class="col-1-4" routerLink="/detail/{{upload.id}}">
         <div class="module hero"><!-- TODO hero->upload -->
             <h4>{{upload.id}}</h4>
         </div>
     </a>
 </div>
+
+<app-upload-search></app-upload-search>

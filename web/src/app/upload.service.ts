@@ -82,6 +82,17 @@ export class UploadService {
     );
   }
 
+  searchUploads(term: string): Observable<Upload[]> {
+    if (!term.trim()) {
+      return of([]);
+    }
 
-}
+    // use `id` as the search target, not tutorial's `name`
+    return this.http.get<Upload[]>(`api/uploads/?id=${term}`).pipe(
+      tap(_ => this.log(`found uplods matching "${term}"`)),
+      catchError(this.handleError<Upload[]>('searchUploads', []))
+    );
+
+
+  }
 

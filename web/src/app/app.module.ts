@@ -14,6 +14,7 @@ import { MessagesComponent } from './messages/messages.component';
 import { MessageService } from './message.service';
 import { AppRoutingModule } from './/app-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { UploadSearchComponent } from './upload-search/upload-search.component';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     MessagesComponent,
     UploadDetailComponent,
     UploadsComponent,
+    UploadSearchComponent,
   ],
   imports: [
     AppRoutingModule,
