@@ -9,12 +9,18 @@ import { Upload } from './upload';
 import { MessageService } from './message.service';
 
 
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
+
+
 @Injectable()
 export class UploadService {
 
   private uploadsUrl = 'api/uploads'; // URL to the web api, TODO APIG+Lambda
 
-  constructor(private http: HttpClient,
+  constructor(
+    private http: HttpClient,
     private messageService: MessageService) { }
 
   private log(message: string) {
@@ -45,8 +51,37 @@ export class UploadService {
     const url = `${this.uploadsUrl}/${id}`;
     return this.http.get<Upload>(url).pipe(
       tap(_ => this.log(`fetched upload id=${id}`)),
+      // TODO: this doesn't display the 404: getUpload id=... failed: undefined
+      // Perhaps the full code handles that? 
       catchError(this.handleError<Upload>(`getUpload id=${id}`))
     );
   }
 
+  updateUpload(upload: Upload): Observable<any> {
+    return this.http.put(this.uploadsUrl, upload, httpOptions).pipe(
+      tap(_ => this.log(`updated upload id=${upload.id}`)),
+      catchError(this.handleError<any>('updateUpload')),
+    );
+  }
+
+  addUpload(upload: Upload): Observable<Upload> {
+    return this.http.post<Upload>(this.uploadsUrl, upload, httpOptions).pipe(
+      tap((hero: Upload) => this.log(`added upload id=${upload.id}`)),
+      catchError(this.handleError<Upload>('addUpload'))
+    );
+  }
+
+  deleteUpload(upload: Upload | string): Observable<Upload> {
+    // Our id is a string, the S3 key, not a number
+    const id = typeof upload === 'string' ? upload : upload.id;
+    const url = `${this.uploadsUrl}/${id}`
+
+    return this.http.delete<Upload>(url, httpOptions).pipe(
+      tap(_ => this.log(`deleted upload id=${id}`)),
+      catchError(this.handleError<Upload>('deleteUpload'))
+    );
+  }
+
+
 }
+

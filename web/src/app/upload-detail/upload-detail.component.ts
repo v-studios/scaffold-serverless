@@ -35,4 +35,9 @@ export class UploadDetailComponent implements OnInit {
     this.location.back();
   }
 
+  save(): void {
+    this.uploadService.updateUpload(this.upload)
+      .subscribe(() => this.goBack());
+  }
+
 }

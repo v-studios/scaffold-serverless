@@ -6,5 +6,15 @@
             <span class="badge" >{{upload.id}}</span>
             <span>size: {{upload.size}}</span>
         </a>
+        <button class="delete" title="delete upload" (click)="delete(upload)">x</button>
     </li>
 </ul>
+
+<div>
+    <label>Upload id (filename):
+        <input #uploadId />
+    </label>
+    <button (click)="add(uploadId.value); uploadId.value=''">
+        add
+    </button>
+</div>
