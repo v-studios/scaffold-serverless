@@ -1,13 +1,10 @@
 <h2>Uploads</h2>
 
 <ul class="heroes"> <!-- TODO fix CSS to match our class names -->
-    <li *ngFor="let upload of uploads" 
-        [class.selected]="upload === selectedUpload"
-        (click)="onSelect(upload)"
-    >
-        <span class="badge">{{upload.id}}</span>
-        <span>size: {{upload.size}}</span>
+    <li *ngFor="let upload of uploads" >
+        <a routerLink="/detail/{{upload.id}}">
+            <span class="badge" >{{upload.id}}</span>
+            <span>size: {{upload.size}}</span>
+        </a>
     </li>
 </ul>
-
-<app-upload-detail [upload]="selectedUpload"></app-upload-detail>

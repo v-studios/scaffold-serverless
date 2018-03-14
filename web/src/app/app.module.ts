@@ -9,6 +9,8 @@ import { UploadDetailComponent } from './upload-detail/upload-detail.component';
 import { UploadService } from './upload.service';
 import { MessagesComponent } from './messages/messages.component';
 import { MessageService } from './message.service';
+import { AppRoutingModule } from './/app-routing.module';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 
 @NgModule({
@@ -16,11 +18,13 @@ import { MessageService } from './message.service';
     AppComponent,
     UploadsComponent,
     UploadDetailComponent,
-    MessagesComponent
+    MessagesComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    AppRoutingModule,
   ],
   providers: [
     UploadService,

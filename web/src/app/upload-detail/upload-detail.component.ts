@@ -1,7 +1,9 @@
+import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit, Input } from '@angular/core';
+import { Location } from '@angular/common';
 
 import { Upload } from '../upload';
-
+import { UploadService } from '../upload.service';
 
 @Component({
   selector: 'app-upload-detail',
@@ -10,10 +12,27 @@ import { Upload } from '../upload';
 })
 export class UploadDetailComponent implements OnInit {
 
-  constructor() { }
+  upload: Upload;
 
-  ngOnInit() { }
+  constructor(
+    private route: ActivatedRoute,
+    private uploadService: UploadService,
+    private location: Location,
+  ) { }
 
-  @Input() upload: Upload;
+  ngOnInit(): void {
+    this.getUpload();
+  }
+
+  getUpload(): void {
+    // For Scaffolding app, upload.id is NOT a number, it's a S3 key, a string
+    const id = this.route.snapshot.paramMap.get('id');
+    this.uploadService.getUpload(id)
+      .subscribe(upload => this.upload = upload);
+  }
+
+  goBack(): void {
+    this.location.back();
+  }
 
 }

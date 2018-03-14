@@ -18,4 +18,9 @@ export class UploadService {
     return of(UPLOADS);
   }
 
+  getUpload(id: string): Observable<Upload> {
+    this.messageService.add(`UploadService: fetched upload id=${id}`);
+    return of(UPLOADS.find(upload => upload.id === id));
+  }
+
 }
