@@ -1,7 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms'; // for NgModel on <input>
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 
+import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { InMemoryDataService } from './in-memory-data.service';
 
 import { AppComponent } from './app.component';
 import { UploadsComponent } from './uploads/uploads.component';
@@ -16,19 +19,21 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 @NgModule({
   declarations: [
     AppComponent,
-    UploadsComponent,
-    UploadDetailComponent,
+    DashboardComponent,
     MessagesComponent,
-    DashboardComponent
+    UploadDetailComponent,
+    UploadsComponent,
   ],
   imports: [
+    AppRoutingModule,
     BrowserModule,
     FormsModule,
-    AppRoutingModule,
+    HttpClientModule,           // TODO: use API, not angular-in-memory-web-api
+    HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService, { dataEncapsulation: false }),
   ],
   providers: [
-    UploadService,
     MessageService,
+    UploadService,
   ],
   bootstrap: [AppComponent]
 })
