@@ -70,7 +70,7 @@ def get_assets(event, contex):
     """
     log.debug('event={}'.format(dumps(event)))
     res = table.scan()
-    if res['ResponseMetadata']['HTTPStatusCode'] != 201:
+    if res['ResponseMetadata']['HTTPStatusCode'] not in (200, 201):
         return {'statusCode': 503, 'body': dumps({'error': res}, default=_undecimal)}
     if 'text/html' not in event['headers']['Accept']:
         return {'statusCode': 200, 'body': dumps(res['Items'], default=_undecimal)}
