@@ -1,7 +1,7 @@
 """Handler for uploaded assets."""
 
 import decimal
-from json import dumps
+from json import dumps, loads
 import logging
 from os import environ
 from urllib.parse import unquote_plus
@@ -115,6 +115,30 @@ def get_asset(event, _contex):
     return {'statusCode': 200,
             'headers': {'Access-Control-Allow-Origin': '*'},
             'body': dumps(item, default=_undecimal)}
+
+
+def put_asset_comment(event, _context):
+    """Update just the comment of asset in the DB; we get the entire asset.
+
+    Invoked by APIG: PUT /asset
+    """
+    # We probably want to be able to update everything about it, generally,
+    # but that requires hairy UpdateExpression and ExpressionAttributeValues. If
+    # we are going to update an entire object, might as well just overwrite the
+    # old one.
+    log.debug('event=%s', event)
+    asset = loads(event['body'])
+    res = table.update_item(Key={'id': asset['id']},
+                            UpdateExpression='SET #c = :c',
+                            ExpressionAttributeNames={'#c': 'comment'},
+                            ExpressionAttributeValues={':c': asset['comment']})
+    if res['ResponseMetadata']['HTTPStatusCode'] not in (200, 201):
+        return {'statusCode': 503,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': dumps({'error': res}, default=_undecimal)}
+    return {'statusCode': 200,
+            'headers': {'Access-Control-Allow-Origin': '*'},
+            'body': dumps({})}
 
 
 def _undecimal(obj):

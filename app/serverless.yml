@@ -59,6 +59,13 @@ functions:
           path: /assets/{id}
           method: get
           cors: true
+  putAssetComment:
+    handler: handler.put_asset_comment
+    events:
+      - http:
+          path: /assets
+          method: put
+          cors: true
 
 resources:
   Resources:
