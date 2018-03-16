@@ -61,19 +61,30 @@ def get_upload_url(event, context):
             'body': dumps({'url': url})}
 
 
-def get_assets(event, contex):
+def get_assets(event, _contex):
     """Return assets listed in DB as JSON, or HTML if the request wanted text/html.
 
     This uses a `scan` which is expensive and evil,
     but for this toy project, no biggie.
     We're not going to exhaustively scan if we hit DDB 1MB limit.
+
+    We MUST return CORS header Access-Control-Allow-Origin for NG front-end,
+    but we don't need that for HTML output.
     """
-    log.debug('event={}'.format(dumps(event)))
+    # Test CORS on OPTIONS, then GET with both JSON and HTML output:
+    # curl -i -X OPTIONS -H 'Accept: application/json' $URL
+    # curl -i -X GET     -H 'Accept: application/json' $URL
+    # curl -i -X GET     -H 'Accept: text/html'        $url
+    log.debug('event=%s', event)
     res = table.scan()
     if res['ResponseMetadata']['HTTPStatusCode'] not in (200, 201):
-        return {'statusCode': 503, 'body': dumps({'error': res}, default=_undecimal)}
+        return {'statusCode': 503,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': dumps({'error': res}, default=_undecimal)}
     if 'text/html' not in event['headers']['Accept']:
-        return {'statusCode': 200, 'body': dumps(res['Items'], default=_undecimal)}
+        return {'statusCode': 200,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': dumps(res['Items'], default=_undecimal)}
     # Hack out some html, ick
     html = '<table>\n'
     for item in res['Items']:
