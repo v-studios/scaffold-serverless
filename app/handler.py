@@ -1,3 +1,5 @@
+"""Handler for uploaded assets."""
+
 import decimal
 from json import dumps
 import logging
@@ -93,6 +95,26 @@ def get_assets(event, _contex):
     return {'statusCode': 200,
             'headers': {'Content-Type': 'text/html'},
             'body': html}
+
+
+def get_asset(event, _contex):
+    """Return details record of a specific asset by it's id as JSON."""
+    log.debug('event=%s', event)
+    id = event['pathParameters']['id']
+    res = table.get_item(Key={'id': id})
+    if res['ResponseMetadata']['HTTPStatusCode'] not in (200, 201):
+        return {'statusCode': 503,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': dumps({'error': res}, default=_undecimal)}
+    try:
+        item = res['Item']
+    except KeyError:
+        return {'statusCode': 404,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': dumps({'error': 'not found id={}'.format(id)})}
+    return {'statusCode': 200,
+            'headers': {'Access-Control-Allow-Origin': '*'},
+            'body': dumps(item, default=_undecimal)}
 
 
 def _undecimal(obj):

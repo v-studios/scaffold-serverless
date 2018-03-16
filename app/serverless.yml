@@ -52,6 +52,13 @@ functions:
           # turning on CORS creates in AWS APIG console an OPTIONS resource
           # but our method must return header Access-Control-Allow-Origin.
           cors: true
+  getAsset:
+    handler: handler.get_asset
+    events:
+      - http:
+          path: /assets/{id}
+          method: get
+          cors: true
 
 resources:
   Resources:
