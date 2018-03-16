@@ -3,8 +3,8 @@ import { FormsModule } from '@angular/forms'; // for NgModel on <input>
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 
-import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { InMemoryDataService } from './in-memory-data.service';
+// import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
+// import { InMemoryDataService } from './in-memory-data.service';
 
 import { AppComponent } from './app.component';
 import { UploadsComponent } from './uploads/uploads.component';
@@ -30,8 +30,9 @@ import { UploadSearchComponent } from './upload-search/upload-search.component';
     AppRoutingModule,
     BrowserModule,
     FormsModule,
-    HttpClientModule,           // TODO: use API, not angular-in-memory-web-api
-    HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService, { dataEncapsulation: false }),
+    HttpClientModule,
+    // Comment out InMemoryWebApiModule when connecting to real API
+    // HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService, { dataEncapsulation: false }),
   ],
   providers: [
     MessageService,

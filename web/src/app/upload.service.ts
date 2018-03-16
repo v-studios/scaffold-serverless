@@ -17,7 +17,8 @@ const httpOptions = {
 @Injectable()
 export class UploadService {
 
-  private uploadsUrl = 'api/uploads'; // URL to the web api, TODO APIG+Lambda
+  // private uploadsUrl = 'api/uploads'; // URL to the InMemory web api
+  private uploadsUrl = 'https://3zgerpnde3.execute-api.us-east-1.amazonaws.com/local/assets';
 
   constructor(
     private http: HttpClient,
