@@ -44,6 +44,7 @@ functions:
     events:
       - http: GET /upload_url
   getAssets:                    # JSON, or HTML if "Accepts: text/html"
+    description: return all assets or if ?term=TERM only those with matching ids
     handler: handler.get_assets
     events:
       - http:
@@ -66,6 +67,7 @@ functions:
           path: /assets
           method: put
           cors: true
+
 
 resources:
   Resources:

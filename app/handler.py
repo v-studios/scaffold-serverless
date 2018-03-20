@@ -64,7 +64,12 @@ def get_upload_url(event, context):
 
 
 def get_assets(event, _contex):
-    """Return assets listed in DB as JSON, or HTML if the request wanted text/html.
+    """Return assets listed in DB as JSON, limited by optional ?term=TERM.
+
+    Return everything:                /assets
+    Return assets with 'alex' in id:  /assets?term=alex
+
+    Return HTML if the request wanted text/html.
 
     This uses a `scan` which is expensive and evil,
     but for this toy project, no biggie.
@@ -76,17 +81,25 @@ def get_assets(event, _contex):
     # Test CORS on OPTIONS, then GET with both JSON and HTML output:
     # curl -i -X OPTIONS -H 'Accept: application/json' $URL
     # curl -i -X GET     -H 'Accept: application/json' $URL
-    # curl -i -X GET     -H 'Accept: text/html'        $url
+    # curl -i -X GET     -H 'Accept: text/html'        $URL
     log.debug('event=%s', event)
     res = table.scan()
     if res['ResponseMetadata']['HTTPStatusCode'] not in (200, 201):
         return {'statusCode': 503,
                 'headers': {'Access-Control-Allow-Origin': '*'},
                 'body': dumps({'error': res}, default=_undecimal)}
+    assets = res['Items']
+    # If there's no QS we get {'queryStringParameters': None} which we can't index
+    qs = event['queryStringParameters']
+    term = qs.get('term') if qs else None
+    if term:
+        assets = [asset for asset in assets if term in asset['id']]
     if 'text/html' not in event['headers']['Accept']:
         return {'statusCode': 200,
                 'headers': {'Access-Control-Allow-Origin': '*'},
-                'body': dumps(res['Items'], default=_undecimal)}
+                'body': dumps(assets, default=_undecimal)}
+
+    # We really shouldn't bother with this HTML return nonsense
     # Hack out some html, ick
     html = '<table>\n'
     for item in res['Items']:

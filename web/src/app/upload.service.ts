@@ -47,6 +47,18 @@ export class UploadService {
       );
   }
 
+  searchUploads(term: string): Observable<Upload[]> {
+    if (!term.trim()) {
+      return of([]);
+    }
+    // use `id` as the search target, not tutorial's `name`
+    const url = `${this.uploadsUrl}?term=${term}`;
+    return this.http.get<Upload[]>(url).pipe(
+      tap(_ => this.log(`found uploads matching "${term}"`)),
+      catchError(this.handleError<Upload[]>('searchUploads', []))
+    );
+  }
+
   getUpload(id: string): Observable<Upload> {
     // 404 if not found
     const url = `${this.uploadsUrl}/${id}`;
@@ -83,17 +95,6 @@ export class UploadService {
     );
   }
 
-  searchUploads(term: string): Observable<Upload[]> {
-    if (!term.trim()) {
-      return of([]);
-    }
 
-    // use `id` as the search target, not tutorial's `name`
-    return this.http.get<Upload[]>(`api/uploads/?id=${term}`).pipe(
-      tap(_ => this.log(`found uplods matching "${term}"`)),
-      catchError(this.handleError<Upload[]>('searchUploads', []))
-    );
-
-
-  }
+}
 
