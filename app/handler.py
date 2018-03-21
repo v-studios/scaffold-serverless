@@ -47,19 +47,19 @@ def get_upload_url(event, context):
     then set a variable 'url' to the returned value, and upload:
         curl -v --upload-file ~/Pictures/alex.jpg "$url"
     """
-    log.debug('event={}'.format(dumps(event)))
-    log.debug('context aws_request_id={}'.format(context.aws_request_id))
+    log.info('event=%s', dumps(event))
+    log.debug('context aws_request_id=%s', context.aws_request_id)
     filename = event['queryStringParameters'].get('filename')
     if not filename:
         return {'statusCode': 400,
                 'body': 'Must supply query string "filename=..."'}
     url = s3.generate_presigned_url('put_object',
                                     Params={'Bucket': UPLOAD_BUCKET_NAME,
-                                            'Key': filename,
-                                            },
+                                            'Key': filename},
                                     ExpiresIn=3600)
-    log.info('url={}'.format(url))
+    log.info('url=%s', url)
     return {'statusCode': 200,
+            'headers': {'Access-Control-Allow-Origin': '*'},
             'body': dumps({'url': url})}
 
 

@@ -18,3 +18,12 @@
         add
     </button>
 </div>
+
+<div>
+    <label>Upload Filename:
+        <input #uploadFilename type="file" />
+    </label>
+    <button (click)="add2(uploadFilename.value); uploadFilename.value=''">
+        upload
+    </button>
+</div>

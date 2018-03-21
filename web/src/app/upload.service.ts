@@ -6,6 +6,8 @@ import { of } from 'rxjs/observable/of';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { Upload } from './upload';
+import { UploadURL } from './upload-url';
+
 import { MessageService } from './message.service';
 
 
@@ -19,6 +21,9 @@ export class UploadService {
 
   // private uploadsUrl = 'api/uploads'; // URL to the InMemory web api
   private uploadsUrl = 'https://3zgerpnde3.execute-api.us-east-1.amazonaws.com/local/assets';
+  private uploadsGetUrl = 'https://3zgerpnde3.execute-api.us-east-1.amazonaws.com/local/upload_url';
+  private baseUrl = 'https://3zgerpnde3.execute-api.us-east-1.amazonaws.com/local';
+
 
   constructor(
     private http: HttpClient,
@@ -78,9 +83,32 @@ export class UploadService {
   }
 
   addUpload(upload: Upload): Observable<Upload> {
+    // TODO: get an UPLOAD URL from API then PUT a file to that URL
     return this.http.post<Upload>(this.uploadsUrl, upload, httpOptions).pipe(
       tap((hero: Upload) => this.log(`added upload id=${upload.id}`)),
       catchError(this.handleError<Upload>('addUpload'))
+    );
+  }
+
+  // Use 2 services for the upload:
+  // 1. getUploadUrl: returns a presigned URL from API
+  // 2. putUploadFile: HTTP PUT file to S3
+
+  getUploadURL(filename: string): Observable<UploadURL> {
+    // We may want to get name, size, type, etc from HTML5 File:
+    // https://stackoverflow.com/questions/27227788/get-source-and-name-of-selected-file-with-angularjs
+    // We probably have to return an HTML File type
+    // since browser may not let us access the filesystem path
+    // TODO: we can't pass filename=C:\fakepath\my_file.mp3 -- can't reach API
+    // probalby have to URL encode, but then we realize we really need the
+    // bar filename
+    //const url = `${this.baseUrl}/upload_url?filename=${filename}`;
+    const url = `${this.baseUrl}/upload_url?filename=FAKE.FILE.NAME`;
+    this.log(`getUploadURL filename=${filename} url=${url}`);
+    // API returns like: {'url': url}
+    return this.http.get<UploadURL>(url).pipe(
+      tap(uploadURL => this.log(`got upload=${uploadURL.url}`)),
+      catchError(this.handleError<UploadURL>('getUploadURL'))
     );
   }
 
