@@ -42,7 +42,10 @@ functions:
   getUploadURL:
     handler: handler.get_upload_url
     events:
-      - http: GET /upload_url
+      - http:
+          method: get
+          path: /upload_url
+          cors: true
   getAssets:                    # JSON, or HTML if "Accepts: text/html"
     description: return all assets or if ?term=TERM only those with matching ids
     handler: handler.get_assets
