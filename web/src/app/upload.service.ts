@@ -105,7 +105,7 @@ export class UploadService {
   // 1. getUploadUrl: returns a presigned URL from API
   // 2. putUploadFile: HTTP PUT file to S3
 
-  getUploadURL(filename: string): Observable<UploadURL> {
+  getUploadURL(filename: string, contentType: string): Observable<UploadURL> {
     // We may want to get name, size, type, etc from HTML5 File:
     // https://stackoverflow.com/questions/27227788/get-source-and-name-of-selected-file-with-angularjs
     // We probably have to return an HTML File type
@@ -115,24 +115,28 @@ export class UploadService {
     // bar filename
     //const url = `${this.baseUrl}/upload_url?filename=${filename}`;
     const url = `${this.baseUrl}/upload_url?filename=FAKE_FILE.txt`;
-    this.log(`getUploadURL filename=${filename} url=${url}`);
+    var headers = { 'Content-Type': contentType };
+    var options = { 'headers': headers };
+    this.log(`getUploadURL contentType=${contentType} filename=${filename} url=${url}`);
     // API returns like: {'url': url}
-    return this.http.get<UploadURL>(url).pipe(
+    return this.http.get<UploadURL>(url, options).pipe(
       tap(uploadURL => this.log(`got upload=${uploadURL.url}`)),
       catchError(this.handleError<UploadURL>('getUploadURL'))
     );
   }
 
-  putUploadFile(uploadURL: UploadURL, body: string): Observable<any> {
+  putUploadFile(uploadURL: UploadURL, contentType: string, body: string): Observable<any> {
     // We get back nothing from the PUT, can only check HTTP response
     // (Looks like we get XML on 403 error, even if we ask for JSON)
     // We must send same Content-Type that getUploadURL specified.
-    this.log(`putUploadFile url.url=${uploadURL.url}`);
-    // put(..., options for HTTP)
-    var headers = { 'Content-Type': 'binary/octet-stream' };
+    // TODO: import {RequestOptions, Headers} from @angular/http
+    this.log(`putUploadFile contentType=${contentType} url.url=${uploadURL.url}`);
+    var headers = { 'Content-Type': contentType };
     var options = { 'headers': headers };
-    this.log(`putUploadFile options.headers={options.headers}`);
-
+    this.log(`putUploadFile options.headers=${JSON.stringify(options.headers)}`);
+    // http.put gratuitously sets Content-Type, e.g., 'foo' gets 'text/plain'
+    // and this breaks AWS presigned signature calculation if it doesn't match
+    // our presigned URL, which may not have had any Content-Type in it.
     return this.http.put(uploadURL.url, body, options).pipe(
       tap(res => this.log(`putUploadFile got res=${res}`)),
       catchError(this.handleError<UploadURL>('putUploadFile'))

@@ -38,7 +38,7 @@ def s3upload(event, context):
             log.error('Putting item to DynamoDB res={}'.format(res))
 
 
-def get_upload_url(event, context):
+def get_upload_url(event, _context):
     """Return a presigned URL to PUT a file to in our S3 bucket.
 
     Test like:
@@ -47,25 +47,31 @@ def get_upload_url(event, context):
     then set a variable 'url' to the returned value, and upload:
         curl -v --upload-file ~/Pictures/alex.jpg "$url"
 
-    TODO: accept content_type as param from FE
+    We get the Content-Type from HTTP headers.
+    TODO: is this the right way? it's not like our GET 'content' is that type;
+    maybe it should also be a URL query-string parameter.
     """
     log.info('event=%s', dumps(event))
-    log.debug('context aws_request_id=%s', context.aws_request_id)
+    content_type = event['headers'].get('content-type')  # APIG downcases this
+    log.info('get_upload_url content-type=%s', content_type)
     filename = event['queryStringParameters'].get('filename')
     if not filename:
         return {'statusCode': 400,
                 'body': 'Must supply query string "filename=..."'}
     # We need to spec content-type since NG sets this header
     # ContentType is proper boto3 spelling, no dash; value must be lowercase.
-    url = s3.generate_presigned_url('put_object',
-                                    Params={'Bucket': UPLOAD_BUCKET_NAME,
-                                            'Key': filename,
-                                            'ContentType': 'binary/octet-stream'},
-                                    ExpiresIn=3600)
+    params = {'Bucket': UPLOAD_BUCKET_NAME, 'Key': filename}
+    if content_type:
+        # Boto3 spelling of Content-Type; value must be lower case for signature to match NG
+        params['ContentType'] = content_type
+    url = s3.generate_presigned_url('put_object', Params=params, ExpiresIn=3600)
     log.info('url=%s', url)
+    body_json = {'url': url}
+    if not content_type:
+        body_json['warning'] = 'No Content-Type that AWS signature calculation may require'
     return {'statusCode': 200,
             'headers': {'Access-Control-Allow-Origin': '*'},
-            'body': dumps({'url': url})}
+            'body': dumps(body_json)}
 
 
 def get_assets(event, _contex):
