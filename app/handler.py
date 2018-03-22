@@ -46,6 +46,8 @@ def get_upload_url(event, context):
 
     then set a variable 'url' to the returned value, and upload:
         curl -v --upload-file ~/Pictures/alex.jpg "$url"
+
+    TODO: accept content_type as param from FE
     """
     log.info('event=%s', dumps(event))
     log.debug('context aws_request_id=%s', context.aws_request_id)
@@ -53,9 +55,12 @@ def get_upload_url(event, context):
     if not filename:
         return {'statusCode': 400,
                 'body': 'Must supply query string "filename=..."'}
+    # We need to spec content-type since NG sets this header
+    # ContentType is proper boto3 spelling, no dash; value must be lowercase.
     url = s3.generate_presigned_url('put_object',
                                     Params={'Bucket': UPLOAD_BUCKET_NAME,
-                                            'Key': filename},
+                                            'Key': filename,
+                                            'ContentType': 'binary/octet-stream'},
                                     ExpiresIn=3600)
     log.info('url=%s', url)
     return {'statusCode': 200,
