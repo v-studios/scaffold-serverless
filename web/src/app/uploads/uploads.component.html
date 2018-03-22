@@ -12,9 +12,9 @@
 
 <div>
     <label>Upload Filename:
-        <input #uploadFilename type="file" />
+        <input type="file" #file (change)="onChange(file.files[0])" />
     </label>
-    <button (click)="add2(uploadFilename.value); uploadFilename.value=''">
+    <button (click)="doUpload(file.files[0])">
         upload
     </button>
 </div>

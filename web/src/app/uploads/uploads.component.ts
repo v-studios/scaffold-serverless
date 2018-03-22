@@ -37,18 +37,15 @@ export class UploadsComponent implements OnInit {
     this.uploadService.getUploads().subscribe(uploads => this.uploads = uploads);
   }
 
-  add2(filename: string): void {
+  doUpload(file0): void {       // needs to be an HTML File type
     // Get presigned URL from API then PUT file to that S3 URL
-    filename = filename.trim();
-    if (!filename) { return; }
-    // TODO: get the filename without preceeding path or HTML5 File object
-    var contentType = 'binary/octet-stream';
-    this.uploadService.getUploadURL(filename, contentType)
+    //var contentType = 'binary/octet-stream';
+    this.uploadService.getUploadURL(file0) // Don't I need to type the param?
       .subscribe(urlObj => {
-        this.log(`add2 got urlObj.url=${urlObj.url}`);
+        // this.log(`add2 got urlObj.url=${urlObj.url}`);
         // local copy of urlObj seems undefined outside this scope, do here while we have it
         // or maybe it's executing async, so runs before we set it?
-        this.uploadService.putUploadFile(urlObj, contentType, 'FAKE BODY')
+        this.uploadService.putUploadFile(urlObj, file0)
           .subscribe(res => {       // probably no response
             this.log('add2 upload res=${res}');
           });
@@ -59,6 +56,10 @@ export class UploadsComponent implements OnInit {
     //       this.uploads.push(upload);
     //     });
     //   this.log(`add added id=${id}`);
+  }
+
+  onChange(file0) {
+    this.log(`onChange file0 name=${file0.name} size=${file0.size} type=${file0.type}`);
   }
 
   delete(upload: Upload): void {

@@ -24,6 +24,7 @@ export class UploadService {
   private uploadsGetUrl = 'https://3zgerpnde3.execute-api.us-east-1.amazonaws.com/local/upload_url';
   private baseUrl = 'https://3zgerpnde3.execute-api.us-east-1.amazonaws.com/local';
 
+  private readbody;
 
   constructor(
     private http: HttpClient,
@@ -105,7 +106,7 @@ export class UploadService {
   // 1. getUploadUrl: returns a presigned URL from API
   // 2. putUploadFile: HTTP PUT file to S3
 
-  getUploadURL(filename: string, contentType: string): Observable<UploadURL> {
+  getUploadURL(file0): Observable<UploadURL> {
     // We may want to get name, size, type, etc from HTML5 File:
     // https://stackoverflow.com/questions/27227788/get-source-and-name-of-selected-file-with-angularjs
     // We probably have to return an HTML File type
@@ -113,10 +114,11 @@ export class UploadService {
     // TODO: we can't pass filename=C:\fakepath\my_file.mp3 -- can't reach API
     // probalby have to URL encode, but then we realize we really need the
     // bar filename
-    //const url = `${this.baseUrl}/upload_url?filename=${filename}`;
-    const url = `${this.baseUrl}/upload_url?filename=FAKE_FILE.txt`;
-    var headers = { 'Content-Type': contentType };
-    var options = { 'headers': headers };
+    const filename = file0.name;
+    const contentType = file0.type;
+    const url = `${this.baseUrl}/upload_url?filename=${filename}`;
+    const headers = { 'Content-Type': contentType };
+    const options = { 'headers': headers };
     this.log(`getUploadURL contentType=${contentType} filename=${filename} url=${url}`);
     // API returns like: {'url': url}
     return this.http.get<UploadURL>(url, options).pipe(
@@ -125,22 +127,40 @@ export class UploadService {
     );
   }
 
-  putUploadFile(uploadURL: UploadURL, contentType: string, body: string): Observable<any> {
+  putUploadFile(uploadURL: UploadURL, file0): Observable<any> { // TODO type of file0
     // We get back nothing from the PUT, can only check HTTP response
     // (Looks like we get XML on 403 error, even if we ask for JSON)
     // We must send same Content-Type that getUploadURL specified.
     // TODO: import {RequestOptions, Headers} from @angular/http
-    this.log(`putUploadFile contentType=${contentType} url.url=${uploadURL.url}`);
-    var headers = { 'Content-Type': contentType };
-    var options = { 'headers': headers };
-    this.log(`putUploadFile options.headers=${JSON.stringify(options.headers)}`);
+    const contentType = file0.type;
+    const headers = { 'Content-Type': contentType };
+    const options = { 'headers': headers };
+    //const body = 'CONSTANT BODY';
+    //this.log(`putUploadFile contentType=${contentType} url.url=${uploadURL.url}`);
+    //this.log(`putUploadFile options.headers=${JSON.stringify(options.headers)}`);
+
+    var reader = new FileReader();
+    var readbody;               // type?
+    var that = this;
+
+    reader.onloadend = function() {
+      console.log(reader.result);
+      readbody = reader.result; // save to outer scope?
+      that.readbody = readbody;
+      that.log(`putUploadFile ONLOADEND READBODY=${readbody}`); // have content here
+    }
+    reader.readAsBinaryString(file0);  // other methods less deprecated??
+    this.log(`putUploadFile OUTSIDE READBODY=${readbody}`); // undefined
+    this.log(`putUploadFile OUTSIDE THAT.READBODY=${that.readbody}`); // undefined
+
     // http.put gratuitously sets Content-Type, e.g., 'foo' gets 'text/plain'
     // and this breaks AWS presigned signature calculation if it doesn't match
     // our presigned URL, which may not have had any Content-Type in it.
-    return this.http.put(uploadURL.url, body, options).pipe(
-      tap(res => this.log(`putUploadFile got res=${res}`)),
-      catchError(this.handleError<UploadURL>('putUploadFile'))
+    return that.http.put(uploadURL.url, readbody, options).pipe(
+      tap(res => that.log(`putUploadFile got res=${res}`)),
+      catchError(that.handleError<UploadURL>('putUploadFile'))
     );
+
   }
 
 }
