@@ -31,14 +31,24 @@ provider:
         - s3:PutObject
         - s3:PutObjectAcl
         - s3:PutObjectTagging
+        - s3:DeleteObject
 
 functions:
-  s3upload:
-    handler: handler.s3upload
+  s3ObjectCreated:
+    description: when S3 object created, put info about it into DynamoDB
+    handler: handler.s3_object_created
     events:
       - s3:
           bucket: uploads-info-${self:provider.stage}
           event: s3:ObjectCreated:*
+  s3ObjectRemoved:
+    description: when S3 object is removed, remove its DynamoDB entry
+    handler: handler.s3_object_removed
+    events:
+      - s3:
+          bucket: uploads-info-${self:provider.stage}
+          event: s3:ObjectRemoved:*
+
   getUploadURL:
     handler: handler.get_upload_url
     events:
@@ -70,7 +80,13 @@ functions:
           path: /assets
           method: put
           cors: true
-
+  deleteAsset:
+    handler: handler.delete_asset
+    events:
+      - http:
+          path: /assets/{id}
+          method: delete
+          cors: true
 
 resources:
   Resources:

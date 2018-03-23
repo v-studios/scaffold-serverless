@@ -23,7 +23,10 @@ UPLOAD_BUCKET_NAME = environ['UPLOAD_BUCKET_NAME']
 s3 = boto3.client('s3')
 
 
-def s3upload(event, context):
+###############################################################################
+# Triggers (non-API)
+
+def s3_object_created(event, context):
     for record in event['Records']:
         log.info('event={}'.format(event))
         log.info('context={}'.format(context))
@@ -37,6 +40,22 @@ def s3upload(event, context):
         if res['ResponseMetadata']['HTTPStatusCode'] != 200:
             log.error('Putting item to DynamoDB res={}'.format(res))
 
+
+def s3_object_removed(event, _context):
+    """When we see an object deleted from S3, remove it from DynamoDB."""
+    for record in event['Records']:
+        log.info('event=%s', event)
+        obj = record['s3']['object']
+        key = unquote_plus(obj['key'])
+        log.info('S3 object removed, deleting from DynamoDB key=%s', key)
+        res = table.delete_item(Key={'id': key})
+        # what if it's already been removed?
+        if res['ResponseMetadata']['HTTPStatusCode'] != 200:
+            log.error('Deleting key=%s to DynamoDB res=%s', key, res)
+
+
+###############################################################################
+# API endpoints
 
 def get_upload_url(event, _context):
     """Return a presigned URL to PUT a file to in our S3 bucket, with read access.
@@ -140,6 +159,21 @@ def get_asset(event, _contex):
     return {'statusCode': 200,
             'headers': {'Access-Control-Allow-Origin': '*'},
             'body': dumps(item, default=_undecimal)}
+
+
+def delete_asset(event, _contex):
+    """Delete the asset by 'id' by deleting the S3 object; trigger will remove from DDB."""
+    log.debug('event=%s', event)
+    id = event['pathParameters']['id']
+    res = s3.delete_object(Bucket=UPLOAD_BUCKET_NAME, Key=id)
+    if res['ResponseMetadata']['HTTPStatusCode'] not in (200, 201):
+        return {'statusCode': 503,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': dumps({'error': res}, default=_undecimal)}
+    log.info('deleted bucket=%s id=%s', UPLOAD_BUCKET_NAME, id)
+    return {'statusCode': 200,
+            'headers': {'Access-Control-Allow-Origin': '*'},
+            'body': dumps({})}  # nothing to say
 
 
 def put_asset_comment(event, _context):

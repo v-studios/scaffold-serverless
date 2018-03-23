@@ -97,6 +97,7 @@ export class UploadService {
     const id = typeof upload === 'string' ? upload : upload.id;
     const url = `${this.uploadsURL}/${id}`
 
+    this.log(`deleteUpload id=${id} url=${url}`)
     return this.http.delete<Upload>(url, httpOptions).pipe(
       tap(_ => this.log(`deleted upload id=${id}`)),
       catchError(this.handleError<Upload>('deleteUpload'))
