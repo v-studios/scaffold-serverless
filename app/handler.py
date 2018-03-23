@@ -39,7 +39,7 @@ def s3upload(event, context):
 
 
 def get_upload_url(event, _context):
-    """Return a presigned URL to PUT a file to in our S3 bucket.
+    """Return a presigned URL to PUT a file to in our S3 bucket, with read access.
 
     Test like:
         curl -i  "$urlget"?filename=ALEX.JPG
@@ -60,7 +60,8 @@ def get_upload_url(event, _context):
                 'body': 'Must supply query string "filename=..."'}
     # We need to spec content-type since NG sets this header
     # ContentType is proper boto3 spelling, no dash; value must be lowercase.
-    params = {'Bucket': UPLOAD_BUCKET_NAME, 'Key': filename}
+    # ACL=public-read so NG can read it and display directly, without API
+    params = {'Bucket': UPLOAD_BUCKET_NAME, 'Key': filename, 'ACL': 'public-read'}
     if content_type:
         # Boto3 spelling of Content-Type; value must be lower case for signature to match NG
         params['ContentType'] = content_type
