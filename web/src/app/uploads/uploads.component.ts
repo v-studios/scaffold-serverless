@@ -14,7 +14,8 @@ export class UploadsComponent implements OnInit {
 
   constructor(
     private uploadService: UploadService,
-    private messageService: MessageService) { }
+    private messageService: MessageService) {
+  }
 
   ngOnInit() {
     this.getUploads();
@@ -38,27 +39,23 @@ export class UploadsComponent implements OnInit {
   }
 
   doUpload(file0): void {       // needs to be an HTML File type
-    // Get presigned URL from API then PUT file to that S3 URL
-    //var contentType = 'binary/octet-stream';
-    this.uploadService.getUploadURL(file0) // Don't I need to type the param?
-      .subscribe(urlObj => {
-        // this.log(`add2 got urlObj.url=${urlObj.url}`);
-        // local copy of urlObj seems undefined outside this scope, do here while we have it
-        // or maybe it's executing async, so runs before we set it?
-        this.uploadService.putUploadFile(urlObj, file0)
-          .subscribe(res => {       // probably no response
-            this.log('add2 upload res=${res}');
-          });
-      });
-    //   // I don't have to instantiate all Upload attrs, they become '' or none, don't know yet
-    //   this.uploadService.addUpload({ id } as Upload)
-    //     .subscribe(upload => {
-    //       this.uploads.push(upload);
-    //     });
-    //   this.log(`add added id=${id}`);
+    // Read file, get presigned URL from API then PUT file to that S3 URL
+    var reader: FileReader = new FileReader();
+
+    reader.onloadend = (e) => {   // arrow_function doesn't change `this`
+      var fileBody = reader.result;
+
+      this.uploadService.getUploadURL(file0)
+        .subscribe(urlObj => {
+          this.uploadService.putUploadFile(urlObj, file0, fileBody)
+            .subscribe(res => this.log(`doUpload done res=${res}`)); // null
+        });
+    }
+    reader.readAsArrayBuffer(file0); // asBinaryString mutilates binaries!
   }
 
   onChange(file0) {
+    // When file is selected, show some basic info
     this.log(`onChange file0 name=${file0.name} size=${file0.size} type=${file0.type}`);
   }
 
