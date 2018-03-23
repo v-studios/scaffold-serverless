@@ -107,13 +107,6 @@ export class UploadService {
   // 2. putUploadFile: HTTP PUT file to S3
 
   getUploadURL(file0): Observable<UploadURL> {
-    // We may want to get name, size, type, etc from HTML5 File:
-    // https://stackoverflow.com/questions/27227788/get-source-and-name-of-selected-file-with-angularjs
-    // We probably have to return an HTML File type
-    // since browser may not let us access the filesystem path
-    // TODO: we can't pass filename=C:\fakepath\my_file.mp3 -- can't reach API
-    // probalby have to URL encode, but then we realize we really need the
-    // bar filename
     const filename = file0.name;
     const contentType = file0.type;
     const url = `${this.baseUrl}/upload_url?filename=${filename}`;
@@ -128,39 +121,28 @@ export class UploadService {
   }
 
   putUploadFile(uploadURL: UploadURL, file0): Observable<any> { // TODO type of file0
-    // We get back nothing from the PUT, can only check HTTP response
-    // (Looks like we get XML on 403 error, even if we ask for JSON)
-    // We must send same Content-Type that getUploadURL specified.
     // TODO: import {RequestOptions, Headers} from @angular/http
     const contentType = file0.type;
     const headers = { 'Content-Type': contentType };
     const options = { 'headers': headers };
-    //const body = 'CONSTANT BODY';
-    //this.log(`putUploadFile contentType=${contentType} url.url=${uploadURL.url}`);
-    //this.log(`putUploadFile options.headers=${JSON.stringify(options.headers)}`);
 
     var reader = new FileReader();
-    var readbody;               // type?
+    var readbody = 'READBODY';               // type?
     var that = this;
 
     reader.onloadend = function() {
-      console.log(reader.result);
+      that.log(`onloaded orig should be empty readbody=${readbody}`);
       readbody = reader.result; // save to outer scope?
-      that.readbody = readbody;
-      that.log(`putUploadFile ONLOADEND READBODY=${readbody}`); // have content here
+      that.log(`putUploadFile ONLOADEND READBODY=${readbody}`); // we have content here
     }
     reader.readAsBinaryString(file0);  // other methods less deprecated??
+    // I think the below may be happening async, before my onloaded() has returned?
     this.log(`putUploadFile OUTSIDE READBODY=${readbody}`); // undefined
-    this.log(`putUploadFile OUTSIDE THAT.READBODY=${that.readbody}`); // undefined
 
-    // http.put gratuitously sets Content-Type, e.g., 'foo' gets 'text/plain'
-    // and this breaks AWS presigned signature calculation if it doesn't match
-    // our presigned URL, which may not have had any Content-Type in it.
-    return that.http.put(uploadURL.url, readbody, options).pipe(
+    return this.http.put(uploadURL.url, 'WIRED STRING', options).pipe(
       tap(res => that.log(`putUploadFile got res=${res}`)),
       catchError(that.handleError<UploadURL>('putUploadFile'))
     );
-
   }
 
 }
