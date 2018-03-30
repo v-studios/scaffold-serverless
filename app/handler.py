@@ -179,15 +179,16 @@ def delete_asset(event, _contex):
 def put_asset_comment(event, _context):
     """Update just the comment of asset in the DB; we get the entire asset.
 
-    Invoked by APIG: PUT /asset
+    Invoked by APIG: PUT /assets/{id}
     """
     # We probably want to be able to update everything about it, generally,
     # but that requires hairy UpdateExpression and ExpressionAttributeValues. If
     # we are going to update an entire object, might as well just overwrite the
     # old one.
     log.debug('event=%s', event)
+    id = event['pathParameters']['id']
     asset = loads(event['body'])
-    res = table.update_item(Key={'id': asset['id']},
+    res = table.update_item(Key={'id': id},
                             UpdateExpression='SET #c = :c',
                             ExpressionAttributeNames={'#c': 'comment'},
                             ExpressionAttributeValues={':c': asset['comment']})

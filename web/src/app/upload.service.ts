@@ -77,8 +77,9 @@ export class UploadService {
     );
   }
 
-  updateUpload(upload: Upload): Observable<any> {
-    return this.http.put(this.uploadsURL, upload, httpOptions).pipe(
+  updateUpload(id: string, upload: Upload): Observable<any> {
+    const url = `${this.uploadsURL}/${id}`;
+    return this.http.put(url, upload, httpOptions).pipe(
       tap(_ => this.log(`updated upload id=${upload.id}`)),
       catchError(this.handleError<any>('updateUpload')),
     );

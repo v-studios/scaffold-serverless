@@ -36,7 +36,7 @@ export class UploadDetailComponent implements OnInit {
   }
 
   save(): void {
-    this.uploadService.updateUpload(this.upload)
+    this.uploadService.updateUpload(this.upload.id, this.upload)
       .subscribe(() => this.goBack());
   }
 

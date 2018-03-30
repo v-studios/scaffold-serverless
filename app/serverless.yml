@@ -74,13 +74,15 @@ functions:
           method: get
           cors: true
   putAssetComment:
+    description: update the comments of the asset matching the id
     handler: handler.put_asset_comment
     events:
       - http:
-          path: /assets
+          path: /assets/{id}
           method: put
           cors: true
   deleteAsset:
+    description: delete the asset matching the id, by nuking the s3 object
     handler: handler.delete_asset
     events:
       - http:
