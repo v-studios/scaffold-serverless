@@ -7,7 +7,7 @@ Gateway to Lambdas. We do direct uploads of files from the browser
 into S3 using pre-signed S3 URLs. Some Lambdas fire in response to
 non-API events.
 
-.. image:: "Serverless Scaffolding Architecture_ web, app.png"
+.. image:: `Serverless Scaffolding Architecture_ web, app.png`
    :width: 100%
 
 
