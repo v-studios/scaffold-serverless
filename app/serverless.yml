@@ -34,6 +34,8 @@ provider:
         - s3:DeleteObject
 
 functions:
+  # Events that are not API Gateway
+
   s3ObjectCreated:
     description: when S3 object created, put info about it into DynamoDB
     handler: handler.s3_object_created
@@ -49,6 +51,7 @@ functions:
           bucket: uploads-info-${self:provider.stage}
           event: s3:ObjectRemoved:*
 
+  # API Gateway events
   getUploadURL:
     handler: handler.get_upload_url
     events:
@@ -67,6 +70,7 @@ functions:
           # but our method must return header Access-Control-Allow-Origin.
           cors: true
   getAsset:
+    description: get asset details matching the id from the DDB
     handler: handler.get_asset
     events:
       - http:

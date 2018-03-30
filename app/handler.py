@@ -97,10 +97,7 @@ def get_upload_url(event, _context):
 def get_assets(event, _contex):
     """Return assets listed in DB as JSON, limited by optional ?term=TERM.
 
-    Return everything:                /assets
-    Return assets with 'alex' in id:  /assets?term=alex
-
-    Return HTML if the request wanted text/html.
+    Return HTML if the request wanted text/html. I should remove this.
 
     This uses a `scan` which is expensive and evil,
     but for this toy project, no biggie.
@@ -108,6 +105,9 @@ def get_assets(event, _contex):
 
     We MUST return CORS header Access-Control-Allow-Origin for NG front-end,
     but we don't need that for HTML output.
+
+    Invoked by APIG: GET /assets                # return all assets
+                     GET /assets?term=alex      # return only id matches
     """
     # Test CORS on OPTIONS, then GET with both JSON and HTML output:
     # curl -i -X OPTIONS -H 'Accept: application/json' $URL
@@ -142,7 +142,10 @@ def get_assets(event, _contex):
 
 
 def get_asset(event, _contex):
-    """Return details record of a specific asset by it's id as JSON."""
+    """Return details record of a specific asset by it's id as JSON.
+
+    Invoked by APIG: GET /assets/{id}
+    """
     log.debug('event=%s', event)
     id = event['pathParameters']['id']
     res = table.get_item(Key={'id': id})
@@ -162,7 +165,10 @@ def get_asset(event, _contex):
 
 
 def delete_asset(event, _contex):
-    """Delete the asset by 'id' by deleting the S3 object; trigger will remove from DDB."""
+    """Delete the asset by 'id' by deleting the S3 object; trigger will remove from DDB.
+
+    Invoked by APIG: DELETE /assets/{id}
+    """
     log.debug('event=%s', event)
     id = event['pathParameters']['id']
     res = s3.delete_object(Bucket=UPLOAD_BUCKET_NAME, Key=id)
