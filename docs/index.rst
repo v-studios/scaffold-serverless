@@ -10,6 +10,7 @@ A Scaffolding for Serverless
    :maxdepth: 2
    :caption: Contents:
 
+   architecture
    docs
    testing
    cicd
