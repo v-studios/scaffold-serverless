@@ -11,17 +11,17 @@ A Scaffolding for Serverless
    :caption: Contents:
 
    intro
-   architecture
    docs
    testing
    cicd
+   stage-envs
    lint-flake
    git-hooks
+   architecture
    serverless-app
-   stage-envs
    api
-   todo
    angular-web-frontend
+   todo
 
 Indices and tables
 ==================
