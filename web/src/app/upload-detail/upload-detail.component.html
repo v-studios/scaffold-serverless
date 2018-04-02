@@ -1,0 +1,20 @@
+<div *ngIf="upload">
+    <h2>Details: {{ upload.id }}</h2>
+    <div>
+        <div>size: {{upload.size}}</div>
+        <div>bucket: {{upload.bucket}}</div>
+        <div>etag: {{upload.etag}}</div>
+        <div>comment: {{upload.comment}}</div>
+    </div>
+    <div>
+        <label>update comment: 
+            <input [(ngModel)]="upload.comment" placeholder="update comment">
+        </label>
+    </div>
+    <div>
+        <button (click)="save()">save</button>
+    </div>
+
+    <button (click)="goBack()">go back</button>
+
+</div>

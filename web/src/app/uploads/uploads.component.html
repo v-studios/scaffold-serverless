@@ -1,0 +1,20 @@
+<h2>Uploads</h2>
+
+<ul class="heroes"> <!-- TODO fix CSS to match our class names -->
+    <li *ngFor="let upload of uploads" >
+        <a routerLink="/detail/{{upload.id}}">
+            <span class="badge" >{{upload.id}}</span>
+            <span>size: {{upload.size}}</span>
+        </a>
+        <button class="delete" title="delete upload" (click)="delete(upload)">x</button>
+    </li>
+</ul>
+
+<div>
+    <label>Upload Filename:
+        <input type="file" #file (change)="onChange(file.files[0])" />
+    </label>
+    <button (click)="doUpload(file.files[0])">
+        upload
+    </button>
+</div>

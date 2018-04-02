@@ -29,6 +29,6 @@
   },
   "homepage": "https://github.com/v-studios/scaffold-serverless#readme",
   "dependencies": {
-    "serverless": "^1.26.0"
+    "serverless": "^1.26.1"
   }
 }

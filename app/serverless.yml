@@ -1,5 +1,5 @@
 service: app
-frameworkVersion: "=1.26.0"
+frameworkVersion: "=1.26.1"
 
 custom:
   stagevars: ${file(stagevars.yml)}
@@ -31,22 +31,68 @@ provider:
         - s3:PutObject
         - s3:PutObjectAcl
         - s3:PutObjectTagging
+        - s3:DeleteObject
 
 functions:
-  s3upload:
-    handler: handler.s3upload
+  # Events that are not API Gateway
+
+  s3ObjectCreated:
+    description: when S3 object created, put info about it into DynamoDB
+    handler: handler.s3_object_created
     events:
       - s3:
           bucket: uploads-info-${self:provider.stage}
           event: s3:ObjectCreated:*
+  s3ObjectRemoved:
+    description: when S3 object is removed, remove its DynamoDB entry
+    handler: handler.s3_object_removed
+    events:
+      - s3:
+          bucket: uploads-info-${self:provider.stage}
+          event: s3:ObjectRemoved:*
+
+  # API Gateway events
   getUploadURL:
     handler: handler.get_upload_url
     events:
-      - http: GET /upload_url
+      - http:
+          method: get
+          path: /upload_url
+          cors: true
   getAssets:                    # JSON, or HTML if "Accepts: text/html"
+    description: return all assets or if ?term=TERM only those with matching ids
     handler: handler.get_assets
     events:
-      - http: GET /assets
+      - http:
+          path: /assets
+          method: get
+          # turning on CORS creates in AWS APIG console an OPTIONS resource
+          # but our method must return header Access-Control-Allow-Origin.
+          cors: true
+  getAsset:
+    description: get asset details matching the id from the DDB
+    handler: handler.get_asset
+    events:
+      - http:
+          path: /assets/{id}
+          method: get
+          cors: true
+  putAssetComment:
+    description: update the comments of the asset matching the id
+    handler: handler.put_asset_comment
+    events:
+      - http:
+          path: /assets/{id}
+          method: put
+          cors: true
+  deleteAsset:
+    description: delete the asset matching the id, by nuking the s3 object
+    handler: handler.delete_asset
+    events:
+      - http:
+          path: /assets/{id}
+          method: delete
+          cors: true
 
 resources:
   Resources:

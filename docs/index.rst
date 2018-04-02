@@ -10,16 +10,18 @@ A Scaffolding for Serverless
    :maxdepth: 2
    :caption: Contents:
 
+   intro
    docs
    testing
    cicd
+   stage-envs
    lint-flake
    git-hooks
+   architecture
    serverless-app
-   stage-envs
    api
+   angular-web-frontend
    todo
-
 
 Indices and tables
 ==================

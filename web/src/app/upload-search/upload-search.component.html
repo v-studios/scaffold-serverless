@@ -1,0 +1,15 @@
+<div id="search-component">
+    <h4>Upload Search</h4>
+
+    <input #searchBox id="search-box"  (keyup)="search(searchBox.value)"/>
+
+    <ul class="search-result">
+        <!-- $ on upload$ indicates an Observable rather than an an array
+             AsyncPipe subscribees to it so we don't have to in the component class -->
+        <li *ngFor="let upload of uploads$ | async" >
+            <a routerLink="/detail/{{upload.id}}" >
+                {{upload.id}}
+            </a>
+        </li>
+    </ul>
+</div>
