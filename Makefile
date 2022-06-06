@@ -6,7 +6,10 @@ all:
 
 venv virtualenv .venv3 .venv3/bin/pip:
 	@echo CREATING VIRTUALENV .venv3
-	python3 -m venv .venv3
+	whereis python
+	which python
+	python --version
+	python -m venv .venv3
 
 pipinstall .venv3/bin/pytest .venv3/bin/coverage .venv3/bin/sphinx-build: .venv3/bin/pip requirements.txt
 	@echo PIP INSTALLING REQUIREMENTS
