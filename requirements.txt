@@ -1,27 +1,5 @@
-# Our requirements
 boto3==1.24.3
 flake8==4.0.1
 pytest==7.1.2
 pytest-cov==3.0.0
-
-# And their dependencies
-attrs==21.4.0
-botocore==1.27.3
-coverage==6.4.1
-importlib-metadata==4.2.0
-iniconfig==1.1.1
-jmespath==1.0.0
-mccabe==0.6.1
-packaging==21.3
-pluggy==1.0.0
-py==1.11.0
-pycodestyle==2.8.0
-pyflakes==2.4.0
-pyparsing==3.0.9
-python-dateutil==2.8.2
-s3transfer==0.6.0
-six==1.16.0
-tomli==2.0.1
-typing_extensions==4.2.0
-urllib3==1.26.9
-zipp==3.8.0
+sphinx==4.3.2  # >= 4.4.0 causes conflict with flake8==4.0.1 

@@ -1,10 +1,11 @@
-.coverage
-htmlcov/
-.venv3/
-__pycache__/
 *.py[cod]
 *~
-node_modules/
+.coverage
 .python-version
-test-results/
+.venv3/
+__pycache__/
+docs/_build/
+htmlcov/
 node_modules/
+node_modules/
+test-results/
