@@ -22,15 +22,15 @@ version: 2
 jobs:
   pytest:
     docker:
-      - image: circleci/python:3.6.4-stretch-node
+      - image: cimg/python:3.9.13-node
 
     working_directory: ~/repo
     steps:
       - checkout
-      - restore_cache:
-          keys:
-          - requirements-{{ checksum "requirements.txt" }}
-          - requirements-
+      # - restore_cache:
+      #     keys:
+      #     - requirements-{{ checksum "requirements.txt" }}
+      #     - requirements-
       - run:
           name: install dependencies
           command: |
@@ -64,15 +64,15 @@ jobs:
   # https://circleci.com/gh/v-studios/scaffold-serverless
   slsdeploy:
     docker:
-      - image: circleci/python:3.6.4-stretch-node
+      - image: cimg/python:3.9.13-node
     working_directory: ~/repo
     steps:
       - checkout
-      - restore_cache:
-          keys:
-          - node_modules-{{ checksum "package.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - node_modules-
+      # - restore_cache:
+      #     keys:
+      #     - node_modules-{{ checksum "package.json" }}
+      #     # fallback to using the latest cache if no exact match is found
+      #     - node_modules-
       - run:
           name: install npm pacakges
           command: |
